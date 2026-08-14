@@ -1,4 +1,114 @@
-<main>
-  <h1>Painel</h1>
-  <p>Visualizar o resumo financeiro e operacional do sistema.</p>
-</main>
+<section class="dashboard" aria-labelledby="dashboard-title">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Visão geral</p>
+      <h1 id="dashboard-title">Painel</h1>
+      <p>Acompanhe os principais indicadores da operação.</p>
+    </div>
+    <button type="button" class="refresh-button" [disabled]="loading()" (click)="loadDashboard()">
+      {{ loading() ? 'Atualizando...' : 'Atualizar dados' }}
+    </button>
+  </header>
+
+  @if (hasError()) {
+    <div class="alert" role="status">
+      Alguns dados não puderam ser carregados. Verifique a conexão com o servidor e tente novamente.
+    </div>
+  }
+
+  <div class="metric-grid" aria-label="Indicadores principais">
+    <article class="metric metric-primary">
+      <span>Valor em reservas</span>
+      @if (loading()) {
+        <span class="skeleton metric-skeleton"></span>
+      } @else {
+        <strong>{{ totalReservationValue() | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+      }
+      <small>{{ data().reservations.length }} reservas registradas</small>
+    </article>
+
+    <article class="metric">
+      <span>Clientes</span>
+      @if (loading()) {
+        <span class="skeleton metric-skeleton"></span>
+      } @else {
+        <strong>{{ data().customers.length }}</strong>
+      }
+      <small>Cadastros no sistema</small>
+    </article>
+
+    <article class="metric">
+      <span>Excursões</span>
+      @if (loading()) {
+        <span class="skeleton metric-skeleton"></span>
+      } @else {
+        <strong>{{ data().tours.length }}</strong>
+      }
+      <small>Roteiros disponíveis</small>
+    </article>
+
+    <article class="metric metric-accent">
+      <span>Cotas ativas</span>
+      @if (loading()) {
+        <span class="skeleton metric-skeleton"></span>
+      } @else {
+        <strong>{{ activeQuotas() }}</strong>
+      }
+      <small>{{ data().employees.length }} funcionários cadastrados</small>
+    </article>
+  </div>
+
+  <section class="reservations-section" aria-labelledby="recent-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Movimentação</p>
+        <h2 id="recent-title">Reservas recentes</h2>
+      </div>
+      <a routerLink="/reservas">Ver todas</a>
+    </div>
+
+    @if (loading()) {
+      <div class="loading-list" aria-label="Carregando reservas">
+        <span class="skeleton"></span>
+        <span class="skeleton"></span>
+        <span class="skeleton"></span>
+      </div>
+    } @else if (recentReservations().length === 0) {
+      <div class="empty-state">
+        <strong>Nenhuma reserva encontrada</strong>
+        <p>As reservas cadastradas aparecerão aqui.</p>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Excursão</th>
+              <th>Data</th>
+              <th>Status</th>
+              <th class="value-column">Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (reservation of recentReservations(); track reservation.id) {
+              <tr>
+                <td data-label="Cliente"><strong>{{ reservation.customer?.name ?? 'Não informado' }}</strong></td>
+                <td data-label="Excursão">{{ reservation.tour?.nameOfTour ?? 'Não informada' }}</td>
+                <td data-label="Data">{{ reservation.date | date: 'dd/MM/yyyy' }}</td>
+                <td data-label="Status">
+                  <span class="status" [class]="'status ' + statusClass(reservation.status)">
+                    {{ statusLabel(reservation.status) }}
+                  </span>
+                </td>
+                <td data-label="Valor" class="value-column">
+                  {{ reservation.value | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</section>

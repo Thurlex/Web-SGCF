@@ -1,12 +1,13 @@
 :root {
-	--color-background: #f4f6f2;
+	--color-background: #f3f6f6;
 	--color-surface: #ffffff;
-	--color-text: #18201b;
-	--color-text-muted: #56615a;
-	--color-border: #d9dfda;
-	--color-accent: #126b4f;
+	--color-text: #20343b;
+	--color-text-muted: #64767c;
+	--color-border: #d9e2e4;
+	--color-primary: #195871;
+	--color-accent: #f2bd4e;
 
-	font-family: Georgia, 'Times New Roman', serif;
+	font-family: Verdana, Geneva, sans-serif;
 	color: var(--color-text);
 	background: var(--color-background);
 	font-synthesis: none;
@@ -25,6 +26,16 @@ html {
 body {
 	min-height: 100dvh;
 	margin: 0;
+}
+
+a,
+button {
+	transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, opacity 160ms ease;
+}
+
+:focus-visible {
+	outline: 3px solid rgb(242 189 78 / 65%);
+	outline-offset: 2px;
 }
 
 button,
