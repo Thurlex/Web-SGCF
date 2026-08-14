@@ -10,7 +10,7 @@ import { Reservations } from './pages/reservations/reservations';
 import { Tours } from './pages/tours/tours';
 import { User } from './pages/user/user';
 
-import { Login } from './login/login';
+import { Login } from './pages/login/login';
 
 export const routes: Routes = [
   {
