@@ -1,13 +1,23 @@
 # WebSgcf
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.20.
+This project uses Angular 22 and the standalone application API.
+
+## Project structure
+
+- `src/app/core/`: application-wide services, guards, interceptors, and configuration.
+- `src/app/features/`: route-level business features, grouped by domain.
+- `src/app/shared/`: reusable presentational components, directives, pipes, and utilities.
+- `src/app/app.routes.ts`: top-level routes; feature routes should be lazy loaded.
+
+Create these directories when the first matching implementation is added. Keeping the initial
+workspace small avoids empty folders and premature abstractions.
 
 ## Development server
 
 To start a local development server, run:
 
 ```bash
-ng serve
+npm start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
@@ -17,7 +27,7 @@ Once the server is running, open your browser and navigate to `http://localhost:
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
 ```bash
-ng generate component component-name
+npm run ng -- generate component features/feature-name/component-name
 ```
 
 For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
@@ -31,7 +41,7 @@ ng generate --help
 To build the project run:
 
 ```bash
-ng build
+npm run build
 ```
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
@@ -41,18 +51,8 @@ This will compile your project and store the build artifacts in the `dist/` dire
 To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
 
 ```bash
-ng test
+npm test
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
 ## Additional Resources
 

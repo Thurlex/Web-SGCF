@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+	--color-background: #f4f6f2;
+	--color-surface: #ffffff;
+	--color-text: #18201b;
+	--color-text-muted: #56615a;
+	--color-border: #d9dfda;
+	--color-accent: #126b4f;
+
+	font-family: Georgia, 'Times New Roman', serif;
+	color: var(--color-text);
+	background: var(--color-background);
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	min-width: 20rem;
+	min-height: 100%;
+}
+
+body {
+	min-height: 100dvh;
+	margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+	font: inherit;
+}
