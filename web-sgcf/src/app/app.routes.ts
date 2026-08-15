@@ -48,9 +48,9 @@ export const routes: Routes = [
     },
 
     {
-      path: 'cotas',
+      path: 'metas',
       component: Quotas,
-      title: 'Cotas | SGCF'
+      title: 'Metas | SGCF'
     },
 
     {
@@ -72,9 +72,9 @@ export const routes: Routes = [
     },
 
     {
-      path: 'excursoes',
+      path: 'tours',
       component: Tours,
-      title: 'Excursões | SGCF'
+      title: 'Tours | SGCF'
     },
 
     {
