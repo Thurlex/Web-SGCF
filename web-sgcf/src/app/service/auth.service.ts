@@ -12,7 +12,7 @@ export interface AuthenticateRequest {
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/api/user';
+  private apiUrl = 'http://localhost:8080/api/User';
 
   constructor(private http: HttpClient) {}
 
