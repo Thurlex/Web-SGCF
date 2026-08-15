@@ -46,7 +46,7 @@
   height: 2.25rem;
   place-items: center;
   border: 1px solid rgb(255 255 255 / 45%);
-  font-family: 'Trebuchet MS', sans-serif;
+  font-family: var(--font-family);
   font-size: 1.15rem;
   font-weight: 800;
 }
@@ -60,7 +60,7 @@
 }
 
 .brand-copy strong {
-  font-family: 'Trebuchet MS', sans-serif;
+  font-family: var(--font-family);
   font-size: 1.15rem;
 }
 
@@ -260,7 +260,7 @@
 
   .mobile-brand {
     color: var(--color-primary);
-    font-family: 'Trebuchet MS', sans-serif;
+    font-family: var(--font-family);
     font-weight: 800;
     text-decoration: none;
   }

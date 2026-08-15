@@ -6,8 +6,9 @@
 	--color-border: #d9e2e4;
 	--color-primary: #195871;
 	--color-accent: #f2bd4e;
+	--font-family: 'Trebuchet MS', Verdana, sans-serif;
 
-	font-family: Verdana, Geneva, sans-serif;
+	font-family: var(--font-family);
 	color: var(--color-text);
 	background: var(--color-background);
 	font-synthesis: none;
