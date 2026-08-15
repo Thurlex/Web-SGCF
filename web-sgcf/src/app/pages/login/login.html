@@ -3,12 +3,21 @@
     <h1>SGCF</h1>
     <h2>Iniciar sesion</h2>
 
+
+        @if (message()) {
+      <div class="message">
+        {{ message() }}
+      </div>
+    }
+
     <div class="form-group">
       <label for="email">Email</label>
       <input
         id="email"
         type="email"
         placeholder="ingrese seu email"
+        [(ngModel)]="email"
+        name="emailfff"
         />
     </div>
 
@@ -18,12 +27,14 @@
         id="password"
         type="password"
         placeholder="ingrese sua senha"
+       [(ngModel)]="password"
+        name="password"
         />
     </div>
 
-    <button type="button">Entrar</button>
+    <button type="button" (click)="login()">Entrar</button>
 
-    <a href="#">
+    <a class="forgot_password" href="#">
       Esqueceu sua senha?
     </a>
 

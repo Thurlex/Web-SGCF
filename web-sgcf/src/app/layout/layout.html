@@ -1,0 +1,113 @@
+<div
+  class="app-shell"
+  [class.sidebar-collapsed]="sidebarCollapsed()"
+  [class.sidebar-open]="sidebarOpen()"
+>
+  <aside class="sidebar" aria-label="Navegação principal">
+
+    <div class="brand-row">
+      <a class="brand" routerLink="/dashboard" (click)="closeMobileSidebar()">
+        <span class="brand-mark">S</span>
+
+        <span class="brand-copy">
+          <strong>SGCF</strong>
+          <small>Gestão de turismo</small>
+        </span>
+      </a>
+
+      <button
+        class="icon-button collapse-button"
+        type="button"
+        [attr.aria-label]="sidebarCollapsed() ? 'Expandir menu' : 'Recolher menu'"
+        [title]="sidebarCollapsed() ? 'Expandir menu' : 'Recolher menu'"
+        (click)="sidebarCollapsed.update((collapsed) => !collapsed)"
+      >
+        <app-icon
+          [icon]="sidebarCollapsed() ? icons.PanelLeftOpen : icons.PanelLeftClose"
+        />
+      </button>
+    </div>
+
+    <nav class="nav-list">
+
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileSidebar()">
+        <app-icon [icon]="icons.CircleGauge" />
+        <span>Painel</span>
+      </a>
+
+      <a routerLink="/reservas" routerLinkActive="active" (click)="closeMobileSidebar()">
+        <app-icon [icon]="icons.CalendarDays" />
+        <span>Reservas</span>
+      </a>
+
+      <a routerLink="/clientes" routerLinkActive="active" (click)="closeMobileSidebar()">
+        <app-icon [icon]="icons.UsersRound" />
+        <span>Clientes</span>
+      </a>
+
+      <a routerLink="/funcionarios" routerLinkActive="active" (click)="closeMobileSidebar()">
+        <app-icon [icon]="icons.UserRound" />
+        <span>Funcionários</span>
+      </a>
+
+      <a routerLink="/excursoes" routerLinkActive="active" (click)="closeMobileSidebar()">
+        <app-icon [icon]="icons.Map" />
+        <span>Excursões</span>
+      </a>
+
+      <a routerLink="/cotas" routerLinkActive="active" (click)="closeMobileSidebar()">
+        <app-icon [icon]="icons.Target" />
+        <span>Cotas</span>
+      </a>
+
+    </nav>
+
+    <a
+      class="profile-link"
+      routerLink="/usuario"
+      routerLinkActive="active"
+      (click)="closeMobileSidebar()"
+    >
+      <span class="avatar">AD</span>
+
+      <span class="profile-copy">
+        <strong>Administrador</strong>
+        <small>Minha conta</small>
+      </span>
+    </a>
+
+  </aside>
+
+  <button
+    class="sidebar-backdrop"
+    type="button"
+    aria-label="Fechar menu"
+    (click)="closeMobileSidebar()"
+  ></button>
+
+  <div class="workspace">
+
+    <header class="mobile-header">
+
+      <button
+        class="icon-button"
+        type="button"
+        aria-label="Abrir menu"
+        title="Abrir menu"
+        (click)="sidebarOpen.set(true)"
+      >
+        <app-icon [icon]="icons.Menu" />
+      </button>
+
+      <a class="mobile-brand" routerLink="/dashboard">
+        SGCF
+      </a>
+
+    </header>
+
+    <main class="app-content">
+      <router-outlet />
+    </main>
+
+  </div>
+</div>

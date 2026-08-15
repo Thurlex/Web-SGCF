@@ -11,71 +11,77 @@ import { Tours } from './pages/tours/tours';
 import { User } from './pages/user/user';
 
 import { Login } from './pages/login/login';
+import { Layout } from './layout/layout';
 
 export const routes: Routes = [
   {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'dashboard'
-  },
+  path: 'login',
+  component: Login,
+  title: 'Login | SGCF'
+},
+ {
+  path: '',
+  component: Layout,
+  children: [
+    {
+      path: '',
+      pathMatch: 'full',
+      redirectTo: 'dashboard'
+    },
 
-  {
-    path: 'login',
-    component: Login,
-    title: 'Login | SGCF'
-  },
+    {
+      path: 'dashboard',
+      component: Dashboard,
+      title: 'Painel | SGCF'
+    },
 
-  {
-    path: 'dashboard',
-    component: Dashboard,
-    title: 'Painel | SGCF'
-  },
+    {
+      path: 'clientes',
+      component: Customers,
+      title: 'Clientes | SGCF'
+    },
 
-  {
-    path: 'clientes',
-    component: Customers,
-    title: 'Clientes | SGCF'
-  },
+    {
+      path: 'funcionarios',
+      component: Employees,
+      title: 'Funcionários | SGCF'
+    },
 
-  {
-    path: 'funcionarios',
-    component: Employees,
-    title: 'Funcionários | SGCF'
-  },
+    {
+      path: 'cotas',
+      component: Quotas,
+      title: 'Cotas | SGCF'
+    },
 
-  {
-    path: 'cotas',
-    component: Quotas,
-    title: 'Cotas | SGCF'
-  },
+    {
+      path: 'reservas',
+      component: Reservations,
+      title: 'Reservas | SGCF'
+    },
 
-  {
-    path: 'reservas',
-    component: Reservations,
-    title: 'Reservas | SGCF'
-  },
+    {
+      path: 'reservas/editar',
+      component: EditReservation,
+      title: 'Editar reserva | SGCF'
+    },
 
-  {
-    path: 'reservas/editar',
-    component: EditReservation,
-    title: 'Editar reserva | SGCF'
-  },
+    {
+      path: 'reservas/editar-status',
+      component: EditReservationStatus,
+      title: 'Editar status da reserva | SGCF'
+    },
 
-  {
-    path: 'reservas/editar-status',
-    component: EditReservationStatus,
-    title: 'Editar status da reserva | SGCF'
-  },
+    {
+      path: 'excursoes',
+      component: Tours,
+      title: 'Excursões | SGCF'
+    },
 
-  {
-    path: 'excursoes',
-    component: Tours,
-    title: 'Excursões | SGCF'
-  },
-
-  {
-    path: 'usuario',
-    component: User,
-    title: 'Usuário | SGCF'
-  }
+    {
+      path: 'usuario',
+      component: User,
+      title: 'Usuário | SGCF'
+    }
+  ]
+}
 ];
