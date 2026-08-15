@@ -1,4 +1,136 @@
-<main>
-  <h1>Tours</h1>
-  <p>Consultar e gerenciar os tours disponíveis.</p>
+<main class="tours-page" aria-labelledby="tours-title">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Catálogo operacional</p>
+      <h1 id="tours-title">Tours</h1>
+      <p>Consulte os destinos cadastrados e acompanhe a procura por cada roteiro.</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="secondary-button" [disabled]="loading()" (click)="loadTours()">
+        {{ loading() ? 'Atualizando...' : 'Atualizar' }}
+      </button>
+      <button type="button" class="primary-button" (click)="openCreateForm()">Novo tour</button>
+    </div>
+  </header>
+
+  @if (feedback()) {
+    <div class="alert success" role="status">{{ feedback() }}</div>
+  }
+
+  @if (hasError()) {
+    <div class="alert" role="alert">
+      Não foi possível concluir a comunicação com o servidor.
+      <button type="button" class="inline-button" (click)="loadTours()">Tentar novamente</button>
+    </div>
+  }
+
+  <section class="content-section" aria-labelledby="tour-list-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Destinos ativos</p>
+        <h2 id="tour-list-title">Roteiros cadastrados</h2>
+      </div>
+      <span class="result-count">{{ tours().length }} {{ tours().length === 1 ? 'destino' : 'destinos' }}</span>
+    </div>
+
+    @if (loading()) {
+      <div class="loading-list" aria-label="Carregando tours">
+        <span class="skeleton"></span>
+        <span class="skeleton"></span>
+        <span class="skeleton"></span>
+      </div>
+    } @else if (tours().length === 0) {
+      <div class="empty-state">
+        <strong>Nenhum tour ativo encontrado</strong>
+        <p>Cadastre o primeiro destino para começar a acompanhar as reservas.</p>
+        <button type="button" class="primary-button" (click)="openCreateForm()">Cadastrar tour</button>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Destino</th>
+              <th>País</th>
+              <th>Locais</th>
+              <th>Distância</th>
+              <th>Preço</th>
+              <th>Reservas</th>
+              <th class="actions-column"><span class="sr-only">Ações</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (tour of tours(); track tour.id) {
+              <tr>
+                <td data-label="Destino"><strong>{{ tour.nameOfTour }}</strong></td>
+                <td data-label="País">{{ tour.countryTour }}</td>
+                <td data-label="Locais">{{ tour.locations }}</td>
+                <td data-label="Distância">{{ tour.kmOftour }} km</td>
+                <td data-label="Preço">{{ tour.price | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+                <td data-label="Reservas"><span class="reservation-count">{{ tour.reservationCount }}</span></td>
+                <td data-label="Ações">
+                  <div class="row-actions">
+                    <button type="button" class="text-button" (click)="openEditForm(tour)">Editar</button>
+                    <button type="button" class="text-button danger" (click)="deactivateTour(tour)">Desativar</button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  @if (showForm()) {
+    <div class="form-panel" aria-labelledby="form-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">{{ editingId() === null ? 'Novo cadastro' : 'Atualização' }}</p>
+          <h2 id="form-title">{{ editingId() === null ? 'Cadastrar tour' : 'Editar tour' }}</h2>
+        </div>
+        <button type="button" class="close-button" aria-label="Fechar formulário" (click)="closeForm()">&times;</button>
+      </div>
+
+      @if (formError()) {
+        <div class="alert" role="alert">{{ formError() }}</div>
+      }
+
+      <form (ngSubmit)="saveTour()" #tourForm="ngForm">
+        <div class="form-grid">
+          <label>
+            Nome do tour
+            <input type="text" name="nameOfTour" [(ngModel)]="form.nameOfTour" required maxlength="120" />
+          </label>
+          <label>
+            País
+            <select name="countryTour" [(ngModel)]="form.countryTour" required>
+              <option value="">Selecione</option>
+              @for (country of countries; track country) {
+                <option [value]="country">{{ country }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            Preço
+            <input type="number" name="price" [(ngModel)]="form.price" min="0" step="0.01" required />
+          </label>
+          <label>
+            Distância em km
+            <input type="number" name="kmOftour" [(ngModel)]="form.kmOftour" min="0" step="1" required />
+          </label>
+          <label class="wide-field">
+            Locais visitados
+            <textarea name="locations" [(ngModel)]="form.locations" required maxlength="500" rows="3"></textarea>
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="secondary-button" [disabled]="saving()" (click)="closeForm()">Cancelar</button>
+          <button type="submit" class="primary-button" [disabled]="saving() || tourForm.invalid">
+            {{ saving() ? 'Salvando...' : 'Salvar tour' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
 </main>
