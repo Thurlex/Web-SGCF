@@ -1,82 +1,113 @@
-:host{
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f5f6fa;
-  font-family: Arial, Helvetica, sans-serif;
+:host {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: 1.5rem;
+  background: var(--color-background);
 }
 
-.login-container{
-  width: 100%;
-  max-width: 400px;
-  padding: 30px;
-  background-color: #f5f6fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  box-sizing: border-box;
+.login-container {
+  width: min(100%, 28rem);
 }
 
-.login-container{
+.login-card {
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: 0 1rem 2.5rem rgb(32 52 59 / 10%);
+}
+
+h1,
+h2 {
+  margin: 0;
   text-align: center;
-  font-size: 28px;
+}
+
+h1 {
+  color: var(--color-primary);
+  font-family: 'Trebuchet MS', Verdana, sans-serif;
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+h2 {
+  margin-top: 0.75rem;
+  color: var(--color-text);
+  font-size: 1.25rem;
   font-weight: 600;
-  color: #333;
-  margin-bottom: 25px;
 }
 
-.form-group{
-  margin-bottom: 20px;
-}
-
-.form-group label{
-  display: block;
-  margin-bottom: 7px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-}
-
-.form-group input{
-  width: 100%;
-  padding: 12px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-  outline: none;
-}
-
-.form-group input:focus{
-  border-color: #3f51b5;
-}
-
-.login-button{
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #f5f6fa;
-  background-color: #3f51b5;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.login-button:hover{
-  background-color: #303f9f;
-}
-.forgot_password{
-  font-size: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .message {
-  padding: 10px 14px;
-  margin-bottom: 15px;
-  border-radius: 6px;
+  margin: 1.5rem 0 0;
+  padding: 0.75rem 0.875rem;
+  border-left: 3px solid var(--color-accent);
+  color: var(--color-text);
+  background: rgb(242 189 78 / 16%);
+  font-size: 0.875rem;
   text-align: center;
-  font-size: 14px;
+}
+
+.form-group {
+  margin-top: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.form-group input {
+  width: 100%;
+  min-height: 2.9rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.form-group input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.form-group input:focus {
+  border-color: var(--color-primary);
+  outline: 3px solid rgb(25 88 113 / 18%);
+  outline-offset: 0;
+}
+
+.login-card > button {
+  width: 100%;
+  min-height: 2.9rem;
+  margin-top: 1.5rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--color-primary);
+  color: var(--color-surface);
+  background: var(--color-primary);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.login-card > button:hover {
+  background: #123f51;
+}
+
+.forgot_password {
+  display: block;
+  margin-top: 1.25rem;
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.forgot_password:hover {
+  color: var(--color-text);
+}
+
+@media (max-width: 30rem) {
+  :host {
+    padding: 1rem;
+  }
 }
