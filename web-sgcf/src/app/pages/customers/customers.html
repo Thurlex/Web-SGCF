@@ -124,6 +124,7 @@
             <th>Lingua</th>
             <th>Origem</th>
             <th>Email</th>
+            <th>Ações</th>
 
           </tr>
         </thead>
@@ -138,6 +139,12 @@
               <td>{{ customer.languageSpeak  }}</td>
               <td>{{ customer.countryCustomer  }}</td>
               <td>{{ customer.email  }}</td>
+              <td>
+                <button type="button" class="delete-button" (click)="removeCustomer(customer.id)">
+                  Remover
+                </button>
+              </td>
+            
             </tr>
           }
         </tbody>
