@@ -1,4 +1,67 @@
-<main>
-  <h1>Funcionários</h1>
-  <p>Consultar e gerenciar os funcionários cadastrados.</p>
+<main class="employees-page" aria-labelledby="employees-title">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Equipe operacional</p>
+      <h1 id="employees-title">Funcionários</h1>
+      <p>Consulte o desempenho e o status dos funcionários cadastrados.</p>
+    </div>
+    <button type="button" class="secondary-button" [disabled]="loading()" (click)="loadEmployees()">
+      {{ loading() ? 'Atualizando...' : 'Atualizar' }}
+    </button>
+  </header>
+
+  @if (feedback()) { <div class="alert success" role="status">{{ feedback() }}</div> }
+  @if (hasError()) { <div class="alert" role="alert">Não foi possível carregar os funcionários. <button type="button" class="inline-button" (click)="loadEmployees()">Tentar novamente</button></div> }
+
+  <section class="content-section" aria-labelledby="employee-list-title">
+    <div class="section-heading">
+      <div><p class="eyebrow">Diretório</p><h2 id="employee-list-title">Funcionários cadastrados</h2></div>
+      <span class="result-count">{{ filteredEmployees().length }} resultados</span>
+    </div>
+    <label class="search-field">
+      <span>Buscar por nome</span>
+      <input type="search" [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)" placeholder="Digite um nome" />
+    </label>
+
+    @if (loading()) {
+      <div class="loading-list" aria-label="Carregando funcionários"><span class="skeleton"></span><span class="skeleton"></span><span class="skeleton"></span></div>
+    } @else if (filteredEmployees().length === 0) {
+      <div class="empty-state"><strong>Nenhum funcionário encontrado</strong><p>Revise o nome informado ou atualize a lista.</p></div>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nome completo</th><th>CNPJ</th><th>CPF</th><th>Idiomas</th><th>Tours</th><th>Retorno em caixa</th><th>Status</th><th><span class="sr-only">Ações</span></th></tr></thead>
+          <tbody>
+            @for (employee of filteredEmployees(); track employee.id) {
+              <tr>
+                <td data-label="Nome completo"><strong>{{ employee.name }}</strong></td>
+                <td data-label="CNPJ">Não informado</td>
+                <td data-label="CPF">{{ employee.cpf }}</td>
+                <td data-label="Idiomas">{{ employee.languagesSpoken.join(', ') || 'Não informado' }}</td>
+                <td data-label="Tours">{{ employee.tourAmount }}</td>
+                <td data-label="Retorno em caixa">{{ employee.cashReturn | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+                <td data-label="Status"><span class="status" [class.inactive]="!employee.active">{{ employee.active ? 'Ativo' : 'Inativo' }}</span></td>
+                <td data-label="Ações"><button type="button" class="text-button danger" [disabled]="!employee.active" (click)="openDeactivation(employee)">Desativar</button></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  @if (employeeToDeactivate(); as employee) {
+    <div class="modal-backdrop" role="presentation" (click)="closeDeactivation()">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="deactivation-title" (click)="$event.stopPropagation()">
+        <p class="eyebrow">Confirmação necessária</p><h2 id="deactivation-title">Desativar {{ employee.name }}?</h2>
+        <p>Confirme a conta atualmente conectada para concluir esta ação.</p>
+        @if (formError()) { <div class="alert" role="alert">{{ formError() }}</div> }
+        <form (ngSubmit)="deactivateEmployee()">
+          <label>E-mail da conta <input type="email" name="email" [(ngModel)]="deactivationForm.email" required autocomplete="username" /></label>
+          <label>Senha <input type="password" name="password" [(ngModel)]="deactivationForm.password" required autocomplete="current-password" /></label>
+          <div class="form-actions"><button type="button" class="secondary-button" [disabled]="deactivating()" (click)="closeDeactivation()">Cancelar</button><button type="submit" class="danger-button" [disabled]="deactivating()">{{ deactivating() ? 'Desativando...' : 'Confirmar desativação' }}</button></div>
+        </form>
+      </section>
+    </div>
+  }
 </main>
