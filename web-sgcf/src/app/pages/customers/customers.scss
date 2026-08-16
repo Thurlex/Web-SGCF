@@ -1,3 +1,155 @@
-:host {
-  display: block;
+.customers {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.eyebrow {
+  color: #1b5e7a;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.page-header h1 {
+  margin: .25rem 0;
+  color: #0b2c3d;
+}
+
+.refresh-button {
+  padding: .8rem 1rem;
+  border: 1px solid #1b5e7a;
+  background: white;
+  color: #1b5e7a;
+  cursor: pointer;
+}
+
+.add-button {
+  padding: .8rem 1rem;
+  border: 1px solid #1b5e7a;
+  background: white;
+  color: #1b5e7a;
+  cursor: pointer;
+}
+
+.refresh-button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.alert {
+  padding: 1rem;
+  border-left: 4px solid #d97706;
+  background: #fff4e5;
+  color: #8a4b08;
+}
+
+.table-card {
+  background: white;
+  border: 1px solid #d9dee5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.loading,
+.empty {
+  padding: 2rem;
+  text-align: center;
+  color: #64748b;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f8fafc;
+}
+
+th,
+td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+  color: #475569;
+  font-size: .9rem;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+.form-card {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  h2 {
+    margin: 0 0 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  input,
+  select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+
+    background: #fff;
+    color: #1f2937;
+
+    font-size: 0.9rem;
+    outline: none;
+
+    &:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    }
+  }
+
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+
+      font-size: 0.9rem;
+      color: #374151;
+
+      cursor: pointer;
+
+      input {
+        width: auto;
+        margin: 0;
+      }
+    }
+  }
+
+  button {
+    margin-right: 0.75rem;
+  }
 }

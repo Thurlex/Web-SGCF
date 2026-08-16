@@ -1,4 +1,147 @@
-<main>
-  <h1>Clientes</h1>
-  <p>Consultar e gerenciar os clientes cadastrados.</p>
-</main>
+<section class="customers">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">GESTÃO DE CLIENTES</p>
+      <h1>Clientes</h1>
+      <p>Consulte e gerencie os clientes cadastrados.</p>
+    </div>
+
+    <button type="button" class="refresh-button" (click)="loadCustomers()" [disabled]="loading()">
+      {{ loading() ? 'Atualizando...' : 'Atualizar' }}
+    </button>
+
+    <button type="button" class="add-button" (click)="openForm()">
+      Adicionar Cliente
+    </button>
+  </header>
+
+  @if (showForm()) {
+    <div class="form-card">
+
+      <h2>Adicionar Cliente</h2>
+
+      <input
+      type="text"
+      placeholder="Nome"
+      [value]="name()"
+      (input)="name.set($any($event.target).value)"
+    />
+
+      <input
+      type="email"
+      placeholder="Email"
+      [value]="email()"
+      (input)="email.set($any($event.target).value)"
+    />
+
+      <input
+      type="text"
+      placeholder="CPF"
+      [value]="cpf()"
+      (input)="cpf.set($any($event.target).value)"
+    />
+
+      <input
+      type="text"
+      placeholder="CNPJ"
+      [value]="cnpj()"
+      (input)="cnpj.set($any($event.target).value)"
+    />
+
+      <select
+      [value]="countryCustomer()"
+      (change)="countryCustomer.set($any($event.target).value)"
+    >
+      <option value="Brazil">Brazil</option>
+      <option value="Paraguay">Paraguay</option>
+      <option value="United_states">United States</option>
+      <option value="Europe">Europe</option>
+    </select>
+
+    <div>
+      <label>
+        <input
+          type="checkbox"
+          [checked]="languageSpeak().includes('Portuguese')"
+          (change)="toggleLanguage('Portuguese')"
+        />
+        Português
+      </label>
+
+      <label>
+        <input
+          type="checkbox"
+          [checked]="languageSpeak().includes('English')"
+          (change)="toggleLanguage('English')"
+        />
+        Inglês
+      </label>
+
+      <label>
+        <input
+          type="checkbox"
+          [checked]="languageSpeak().includes('Spanish')"
+          (change)="toggleLanguage('Spanish')"
+        />
+        Espanhol
+      </label>
+    </div>
+
+    <button type="button" (click)="cancelForm()">
+      Cancelar
+    </button>
+
+    <button type="button" (click)="addCustomer()">
+      Salvar Cliente
+    </button>
+
+  </div>
+}
+
+  @if (hasError()) {
+    <div class="alert">
+      Não foi possível carregar os clientes.
+    </div>
+  }
+
+  <div class="table-card">
+    @if (loading()) {
+      <div class="loading">
+        Carregando clientes...
+      </div>
+    } @else if (customers().length === 0) {
+      <div class="empty">
+        Nenhum cliente encontrado.
+      </div>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cnpj</th>
+            <th>Cpf</th>
+            <th>Nome</th>
+            <th>Lingua</th>
+            <th>Origem</th>
+            <th>Email</th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (customer of customers(); track customer.id) {
+            <tr>
+              <td>{{ customer.id }}</td>
+              <td>{{ customer.cnpj  }}</td>
+              <td>{{ customer.cpf  }}</td>
+              <td>{{ customer.name  }}</td>
+              <td>{{ customer.languageSpeak  }}</td>
+              <td>{{ customer.countryCustomer  }}</td>
+              <td>{{ customer.email  }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</section>
