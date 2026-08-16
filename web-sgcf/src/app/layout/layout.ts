@@ -1,10 +1,11 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import {
   CalendarDays,
   CircleGauge,
   Map,
   Menu,
+  LogOut,
   PanelLeftClose,
   PanelLeftOpen,
   Target,
@@ -12,6 +13,7 @@ import {
   UsersRound,
 } from 'lucide';
 import { AppIcon } from '../shared/app-icon';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -29,6 +31,7 @@ export class Layout {
     CircleGauge,
     Map,
     Menu,
+    LogOut,
     PanelLeftClose,
     PanelLeftOpen,
     Target,
@@ -36,7 +39,19 @@ export class Layout {
     UsersRound,
   };
 
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {}
+
   protected closeMobileSidebar(): void {
     this.sidebarOpen.set(false);
+  }
+
+  protected logout(): void {
+    this.authService.logout().subscribe({
+      next: () => this.router.navigate(['/login']),
+      error: () => this.router.navigate(['/login']),
+    });
   }
 }

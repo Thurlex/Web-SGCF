@@ -129,6 +129,26 @@
   padding-block: 0.65rem;
 }
 
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 2.9rem;
+  margin: 0 0.75rem 1rem;
+  padding: 0 0.875rem;
+  border: 0;
+  color: #c9dde4;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.logout-button:hover {
+  color: #ffffff;
+  background: rgb(255 255 255 / 9%);
+}
+
 .avatar {
   display: grid;
   flex: 0 0 2rem;
@@ -166,6 +186,7 @@
 .sidebar-collapsed .brand-copy,
 .sidebar-collapsed .profile-copy,
 .sidebar-collapsed .nav-list span,
+.sidebar-collapsed .logout-button span,
 .sidebar-collapsed .brand-mark {
   display: none;
 }
@@ -180,13 +201,18 @@
 }
 
 .sidebar-collapsed .nav-list a,
-.sidebar-collapsed .profile-link {
+.sidebar-collapsed .profile-link,
+.sidebar-collapsed .logout-button {
   justify-content: center;
   padding-inline: 0;
 }
 
 .sidebar-collapsed .nav-list app-icon {
   margin-right: 0;
+}
+
+.sidebar-collapsed .logout-button {
+  justify-content: center;
 }
 
 @media (max-width: 48rem) {
@@ -211,7 +237,8 @@
   .sidebar-collapsed .brand-mark,
   .sidebar-collapsed .brand-copy,
   .sidebar-collapsed .profile-copy,
-  .sidebar-collapsed .nav-list span {
+  .sidebar-collapsed .nav-list span,
+  .sidebar-collapsed .logout-button span {
     display: flex;
   }
 
@@ -221,13 +248,18 @@
   }
 
   .sidebar-collapsed .nav-list a,
-  .sidebar-collapsed .profile-link {
+  .sidebar-collapsed .profile-link,
+  .sidebar-collapsed .logout-button {
     justify-content: flex-start;
     padding-inline: 0.875rem;
   }
 
   .sidebar-collapsed .nav-list app-icon {
     margin-right: 0.9rem;
+  }
+
+  .sidebar-collapsed .logout-button {
+    justify-content: flex-start;
   }
 
   .sidebar-backdrop {

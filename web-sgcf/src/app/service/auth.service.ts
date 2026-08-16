@@ -27,15 +27,16 @@ export class AuthService {
   authenticate(request: AuthenticateRequest): Observable<AuthenticatedUser> {
     return this.http.post<AuthenticatedUser>(
       `${this.apiUrl}/authenticate`,
-      request
+      request,
+      { withCredentials: true }
     );
   }
 
   session(): Observable<AuthenticatedUser> {
-    return this.http.get<AuthenticatedUser>(`${this.apiUrl}/session`);
+    return this.http.get<AuthenticatedUser>(`${this.apiUrl}/session`, { withCredentials: true });
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/logout`, null);
+    return this.http.post<void>(`${this.apiUrl}/logout`, null, { withCredentials: true });
   }
 }

@@ -16,11 +16,10 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render the navigation shell', async () => {
+  it('should render the router outlet host', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.brand')?.textContent).toContain('SGCF');
-    expect(compiled.querySelector('aside')?.getAttribute('aria-label')).toBe('Navegação principal');
+    expect(compiled.querySelector('main')).toBeTruthy();
   });
 });

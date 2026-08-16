@@ -71,10 +71,15 @@
       <span class="avatar">AD</span>
 
       <span class="profile-copy">
-        <strong>Administrador</strong>
-        <small>Minha conta</small>
+        <strong>Minha conta</strong>
+        <small>Perfil do usuário</small>
       </span>
     </a>
+
+    <button class="logout-button" type="button" (click)="logout()">
+      <app-icon [icon]="icons.LogOut" />
+      <span>Sair</span>
+    </button>
 
   </aside>
 
