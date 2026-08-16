@@ -1,4 +1,234 @@
-<main>
-  <h1>Metas</h1>
-  <p>Consultar e controlar as metas disponíveis.</p>
+<main class="quotas-page" aria-labelledby="quotas-title">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Acompanhamento financeiro</p>
+      <h1 id="quotas-title">Metas</h1>
+      <p>Veja o avanço das metas da empresa e dos funcionários a partir das reservas concluídas.</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="secondary-button" [disabled]="loading()" (click)="loadQuotas()">
+        {{ loading() ? 'Atualizando...' : 'Atualizar' }}
+      </button>
+      @if (canCreateEmployeeQuota()) {
+        <button type="button" class="primary-button" (click)="openEmployeeForm()">Nova meta</button>
+      }
+    </div>
+  </header>
+
+  @if (feedback()) {
+    <div class="alert success" role="status">{{ feedback() }}</div>
+  }
+
+  @if (hasError()) {
+    <div class="alert" role="alert">
+      Não foi possível carregar todas as informações das metas.
+      <button type="button" class="inline-button" (click)="loadQuotas()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <section class="content-section loading-section" aria-label="Carregando metas">
+      <span class="skeleton skeleton-heading"></span>
+      <span class="skeleton skeleton-line"></span>
+      <span class="skeleton skeleton-line short"></span>
+    </section>
+    <section class="employee-grid" aria-hidden="true">
+      <span class="skeleton quota-skeleton"></span>
+      <span class="skeleton quota-skeleton"></span>
+      <span class="skeleton quota-skeleton"></span>
+    </section>
+  } @else {
+    @if (companyQuota(); as company) {
+      <section class="company-section" aria-labelledby="company-quota-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Meta mensal</p>
+            <h2 id="company-quota-title">Meta da empresa</h2>
+            <p class="period">{{ company.startDate | date: 'dd/MM/yyyy' }} a {{ company.endDate | date: 'dd/MM/yyyy' }}</p>
+          </div>
+          <div class="section-actions">
+            <span class="status" [class]="'status ' + stateClass(company)">{{ quotaState(company) }}</span>
+            @if (isManager()) {
+              <button type="button" class="text-button" (click)="openCompanyForm()">Alterar valor</button>
+            } @else {
+              <span class="permission-note">Apenas gerente</span>
+            }
+          </div>
+        </div>
+
+        <div class="company-progress">
+          <div class="progress-copy">
+            <strong>{{ company.achievedValue | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+            <span>de {{ company.targetValue | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</span>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            [attr.aria-label]="'Progresso da meta da empresa: ' + progressPercent(company) + '%'
+            "
+            aria-valuemin="0"
+            aria-valuemax="100"
+            [attr.aria-valuenow]="progressPercent(company)"
+          >
+            <span class="progress-value" [style.width.%]="progressPercent(company)"></span>
+          </div>
+          <div class="progress-meta">
+            <span>{{ progressPercent(company) }}% atingido</span>
+            <span>{{ remainingValue(company) | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }} restantes</span>
+          </div>
+        </div>
+
+        <p class="policy-note">Considera reservas concluídas do primeiro ao último dia do mês.</p>
+      </section>
+    } @else {
+      <section class="content-section empty-state">
+        <strong>Meta da empresa indisponível</strong>
+        <p>O sistema criará a meta mensal automaticamente quando o backend estiver conectado.</p>
+      </section>
+    }
+
+    <section class="employee-section" aria-labelledby="employee-quotas-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Desempenho individual</p>
+          <h2 id="employee-quotas-title">Metas dos funcionários</h2>
+        </div>
+        <span class="result-count">{{ employeeQuotas().length }} {{ employeeQuotas().length === 1 ? 'meta' : 'metas' }}</span>
+      </div>
+
+      @if (employeeQuotas().length === 0) {
+        <div class="content-section empty-state">
+          <strong>Nenhuma meta individual encontrada</strong>
+          <p>Crie uma meta para começar a acompanhar a contribuição de cada funcionário.</p>
+          @if (canCreateEmployeeQuota()) {
+            <button type="button" class="primary-button" (click)="openEmployeeForm()">Criar meta individual</button>
+          }
+        </div>
+      } @else {
+        <div class="employee-grid">
+          @for (quota of employeeQuotas(); track quota.id) {
+            <article class="quota-card">
+              <div class="quota-card-header">
+                <div>
+                  <h3>{{ quota.employee?.name ?? 'Funcionário não informado' }}</h3>
+                  <p>{{ quota.startDate | date: 'dd/MM/yyyy' }} a {{ quota.endDate | date: 'dd/MM/yyyy' }}</p>
+                </div>
+                <span class="status" [class]="'status ' + stateClass(quota)">{{ quotaState(quota) }}</span>
+              </div>
+
+              <div class="quota-values">
+                <span>
+                  <small>Contribuição</small>
+                  <strong>{{ quota.achievedValue | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+                </span>
+                <span>
+                  <small>Objetivo</small>
+                  <strong>{{ quota.targetValue | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+                </span>
+              </div>
+
+              <div
+                class="progress-track"
+                role="progressbar"
+                [attr.aria-label]="'Progresso da meta de ' + (quota.employee?.name ?? 'funcionário') + ': ' + progressPercent(quota) + '%'
+                "
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [attr.aria-valuenow]="progressPercent(quota)"
+              >
+                <span class="progress-value" [style.width.%]="progressPercent(quota)"></span>
+              </div>
+
+              <div class="progress-meta">
+                <span>{{ progressPercent(quota) }}% atingido</span>
+                <span>{{ remainingValue(quota) | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }} restantes</span>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  @if (showForm()) {
+    <section class="form-panel" aria-labelledby="form-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">{{ editingCompany() ? 'Meta da empresa' : 'Novo objetivo' }}</p>
+          <h2 id="form-title">{{ editingCompany() ? 'Alterar valor mensal' : 'Criar meta individual' }}</h2>
+        </div>
+        <button type="button" class="close-button" aria-label="Fechar formulário" (click)="closeForm()">&times;</button>
+      </div>
+
+      @if (formError()) {
+        <div class="alert" role="alert">{{ formError() }}</div>
+      }
+
+      <form (ngSubmit)="saveQuota()" #quotaForm="ngForm">
+        <div class="form-grid">
+          @if (editingCompany()) {
+            <label class="wide-field">
+              Valor da meta mensal
+              <input
+                type="number"
+                name="targetValue"
+                [(ngModel)]="form.targetValue"
+                min="5000"
+                step="0.01"
+                required
+              />
+              <span class="field-note">O valor mínimo para a empresa é R$ 5.000,00.</span>
+            </label>
+          } @else {
+            @if (isManager()) {
+              <label>
+                Funcionário
+                <select name="employeeId" [(ngModel)]="form.employeeId" required>
+                  <option [ngValue]="null">Selecione</option>
+                  @for (employee of employees(); track employee.id) {
+                    <option [ngValue]="employee.id">{{ employee.name }}</option>
+                  }
+                </select>
+              </label>
+            } @else {
+              <div class="locked-field">
+                <span>Funcionário</span>
+                <strong>{{ currentUser()?.userName }}</strong>
+                <input type="hidden" name="employeeId" [(ngModel)]="form.employeeId" />
+              </div>
+            }
+            <label>
+              Valor do objetivo
+              <input
+                type="number"
+                name="targetValue"
+                [(ngModel)]="form.targetValue"
+                min="100"
+                max="10000"
+                step="0.01"
+                required
+              />
+              <span class="field-note">Entre R$ 100,00 e R$ 10.000,00.</span>
+            </label>
+            <label>
+              Início da meta
+              <input type="date" name="startDate" [(ngModel)]="form.startDate" readonly required />
+              <span class="field-note">Definido automaticamente para hoje.</span>
+            </label>
+            <div class="locked-field" aria-label="Período da meta">
+              <span class="field-label">Fim da meta</span>
+              <strong>{{ form.startDate | date: 'dd/MM/yyyy' }} + 30 dias</strong>
+              <span class="field-note">O período só pode ser ajustado por um gerente.</span>
+            </div>
+          }
+        </div>
+        <div class="form-actions">
+          <button type="button" class="secondary-button" [disabled]="saving()" (click)="closeForm()">Cancelar</button>
+          <button type="submit" class="primary-button" [disabled]="saving() || quotaForm.invalid">
+            {{ saving() ? 'Salvando...' : 'Salvar meta' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  }
 </main>
