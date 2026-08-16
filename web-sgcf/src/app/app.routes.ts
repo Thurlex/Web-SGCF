@@ -12,6 +12,8 @@ import { User } from './pages/user/user';
 
 import { Login } from './pages/login/login';
 import { Layout } from './layout/layout';
+import { authGuard } from './service/auth.guard';
+import { managerGuard } from './service/manager.guard';
 
 export const routes: Routes = [
   {
@@ -19,15 +21,16 @@ export const routes: Routes = [
   component: Login,
   title: 'Login | SGCF'
 },
-{
-      path: '',
-      pathMatch: 'full',
-      redirectTo: 'login'
-    },
  {
   path: '',
   component: Layout,
+  canActivate: [authGuard],
   children: [
+    {
+      path: '',
+      pathMatch: 'full',
+      redirectTo: 'dashboard'
+    },
 
     {
       path: 'dashboard',
@@ -44,6 +47,7 @@ export const routes: Routes = [
     {
       path: 'funcionarios',
       component: Employees,
+      canActivate: [managerGuard],
       title: 'Funcionários | SGCF'
     },
 
