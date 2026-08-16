@@ -53,7 +53,7 @@ export class Customers {
   this.hasError.set(false);
 
   this.http
-    .get<Customer[]>(`${this.apiUrl}/findAll`)
+    .get<Customer[]>(`${this.apiUrl}/findAll/active`)
     .pipe(
       catchError(() => {
         this.hasError.set(true);
@@ -105,6 +105,25 @@ protected addCustomer(): void {
       },
       error: (error) => {
         console.error('Erro ao adicionar cliente:', error);
+        console.error('Status:', error.status);
+  console.error('Resposta do servidor:', error.error);
+      }
+    });
+}
+
+protected removeCustomer(id: number): void {
+  this.http
+    .delete(`${this.apiUrl}/delete/${id}`, {
+      responseType: 'text'
+    })
+    .subscribe({
+      next: () => {
+        this.customers.update(customers =>
+          customers.filter(customer => customer.id !== id)
+        );
+      },
+      error: (error) => {
+        console.error('Erro ao remover cliente:', error);
       }
     });
 }
