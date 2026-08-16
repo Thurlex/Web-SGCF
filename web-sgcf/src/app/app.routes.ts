@@ -19,15 +19,15 @@ export const routes: Routes = [
   component: Login,
   title: 'Login | SGCF'
 },
+{
+      path: '',
+      pathMatch: 'full',
+      redirectTo: 'login'
+    },
  {
   path: '',
   component: Layout,
   children: [
-    {
-      path: '',
-      pathMatch: 'full',
-      redirectTo: 'dashboard'
-    },
 
     {
       path: 'dashboard',
