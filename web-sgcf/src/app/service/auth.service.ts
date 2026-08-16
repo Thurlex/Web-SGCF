@@ -7,19 +7,35 @@ export interface AuthenticateRequest {
   password: string;
 }
 
+export interface AuthenticatedUser {
+  id: number;
+  userName: string;
+  permission: 'Manager' | 'Employee';
+  email: string;
+  employeeId: number | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/api/User';
+  private apiUrl = '/api/User';
 
   constructor(private http: HttpClient) {}
 
-  authenticate(request: AuthenticateRequest): Observable<boolean> {
-    return this.http.post<boolean>(
+  authenticate(request: AuthenticateRequest): Observable<AuthenticatedUser> {
+    return this.http.post<AuthenticatedUser>(
       `${this.apiUrl}/authenticate`,
       request
     );
+  }
+
+  session(): Observable<AuthenticatedUser> {
+    return this.http.get<AuthenticatedUser>(`${this.apiUrl}/session`);
+  }
+
+  logout(): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/logout`, null);
   }
 }
