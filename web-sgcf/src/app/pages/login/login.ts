@@ -29,18 +29,15 @@ export class Login {
     this.authService.authenticate(request).subscribe({
 
       next: (response) => {
-
-        console.log('Resposta do servidor', response)
-        if(response === false){
+        if (!response) {
           this.message.set('Usuário ou senha incorretos.');
-        }else{
-          this.message.set('bem-vindo.');
-          this.router.navigate(['/dashboard'])
+          return;
         }
+        this.message.set('Bem-vindo.');
+        this.router.navigate(['/dashboard']);
       },
       error: (error)=>{
         this.message.set('Usuário ou senha incorretos.');
-        console.error('Erro no servidor',error)
       }
 
     });
