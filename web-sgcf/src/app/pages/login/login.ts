@@ -35,7 +35,9 @@ export class Login {
           this.message.set('Usuário ou senha incorretos.');
         }else{
           this.message.set('bem-vindo.');
-          this.router.navigate(['/dashboard'])
+          this.router.navigate(['/dashboard']);
+          localStorage.setItem('user',this.email);
+
         }
       },
       error: (error)=>{
