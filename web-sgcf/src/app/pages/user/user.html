@@ -11,8 +11,10 @@
     <p class="eyebrow">USUÁRIO ATUAL</p>
     <h2>{{ currentUser()?.userName }}</h2>
     <p>{{ currentUser()?.email }}</p>
-    <span>{{ currentUser()?.permission }}</span>
-  </div>
+  <span>
+   {{ currentUser()?.permission === 'Manager' ? 'Gerente' : 'Funcionário' }}
+  </span>
+</div>
 }
 
     <div class="header-actions">

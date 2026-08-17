@@ -58,6 +58,9 @@ export class Users {
       .pipe(
         catchError((error) => {
           console.error('Erro ao carregar usuários:', error);
+          console.error('Status:', error.status);
+          console.error('Resposta do servidor:', error.url);
+          console.error('respostado servidor:', error.error);
           this.hasError.set(true);
           return of([] as User[]);
         }),
