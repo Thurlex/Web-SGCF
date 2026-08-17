@@ -1,136 +1,167 @@
 <main class="tours-page" aria-labelledby="tours-title">
-  <header class="page-header">
+  <header class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
     <div>
       <p class="eyebrow">Catálogo operacional</p>
-      <h1 id="tours-title">Tours</h1>
-      <p>Consulte os destinos cadastrados e acompanhe a procura por cada roteiro.</p>
+      <h1 id="tours-title" class="h2 mb-2">Tours</h1>
+      <p class="text-muted mb-0">
+        Consulte os destinos cadastrados e acompanhe a procura por cada roteiro.
+      </p>
     </div>
-    <div class="header-actions">
-      <button type="button" class="secondary-button" [disabled]="loading()" (click)="loadTours()">
+    <div class="d-flex flex-wrap gap-2">
+      <button type="button" class="btn btn-outline-primary" [disabled]="loading()" (click)="loadTours()">
         {{ loading() ? 'Atualizando...' : 'Atualizar' }}
       </button>
-      <button type="button" class="primary-button" (click)="openCreateForm()">Novo tour</button>
+      <button type="button" class="btn btn-primary" (click)="openCreateForm()">Novo tour</button>
     </div>
   </header>
 
   @if (feedback()) {
-    <div class="alert success" role="status">{{ feedback() }}</div>
+    <div class="alert alert-success" role="status">{{ feedback() }}</div>
   }
 
   @if (hasError()) {
-    <div class="alert" role="alert">
+    <div class="alert alert-warning" role="alert">
       Não foi possível concluir a comunicação com o servidor.
-      <button type="button" class="inline-button" (click)="loadTours()">Tentar novamente</button>
+      <button type="button" class="btn btn-link p-0 align-baseline" (click)="loadTours()">
+        Tentar novamente
+      </button>
     </div>
   }
 
-  <section class="content-section" aria-labelledby="tour-list-title">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">Destinos ativos</p>
-        <h2 id="tour-list-title">Roteiros cadastrados</h2>
+  <section class="card shadow-0 border" aria-labelledby="tour-list-title">
+    <div class="card-body">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+        <div>
+          <p class="eyebrow">Destinos ativos</p>
+          <h2 id="tour-list-title" class="h5 mb-0">Roteiros cadastrados</h2>
+        </div>
+        <span class="text-muted small">
+          {{ tours().length }} {{ tours().length === 1 ? 'destino' : 'destinos' }}
+        </span>
       </div>
-      <span class="result-count">{{ tours().length }} {{ tours().length === 1 ? 'destino' : 'destinos' }}</span>
-    </div>
 
-    @if (loading()) {
-      <div class="loading-list" aria-label="Carregando tours">
-        <span class="skeleton"></span>
-        <span class="skeleton"></span>
-        <span class="skeleton"></span>
-      </div>
-    } @else if (tours().length === 0) {
-      <div class="empty-state">
-        <strong>Nenhum tour ativo encontrado</strong>
-        <p>Cadastre o primeiro destino para começar a acompanhar as reservas.</p>
-        <button type="button" class="primary-button" (click)="openCreateForm()">Cadastrar tour</button>
-      </div>
-    } @else {
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Destino</th>
-              <th>País</th>
-              <th>Locais</th>
-              <th>Distância</th>
-              <th>Preço</th>
-              <th>Reservas</th>
-              <th class="actions-column"><span class="sr-only">Ações</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (tour of tours(); track tour.id) {
+      @if (loading()) {
+        <div class="placeholder-glow" aria-label="Carregando tours">
+          <span class="placeholder col-12 mb-2"></span>
+          <span class="placeholder col-12 mb-2"></span>
+          <span class="placeholder col-8"></span>
+        </div>
+      } @else if (tours().length === 0) {
+        <div class="text-center py-5">
+          <strong class="d-block mb-2">Nenhum tour ativo encontrado</strong>
+          <p class="text-muted">Cadastre o primeiro destino para começar a acompanhar as reservas.</p>
+          <button type="button" class="btn btn-primary" (click)="openCreateForm()">Cadastrar tour</button>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead>
               <tr>
-                <td data-label="Destino"><strong>{{ tour.nameOfTour }}</strong></td>
-                <td data-label="País">{{ tour.countryTour }}</td>
-                <td data-label="Locais">{{ tour.locations }}</td>
-                <td data-label="Distância">{{ tour.kmOftour }} km</td>
-                <td data-label="Preço">{{ tour.price | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
-                <td data-label="Reservas"><span class="reservation-count">{{ tour.reservationCount }}</span></td>
-                <td data-label="Ações">
-                  <div class="row-actions">
-                    <button type="button" class="text-button" (click)="openEditForm(tour)">Editar</button>
-                    <button type="button" class="text-button danger" (click)="deactivateTour(tour)">Desativar</button>
-                  </div>
-                </td>
+                <th scope="col">Destino</th>
+                <th scope="col">País</th>
+                <th scope="col">Locais</th>
+                <th scope="col">Distância</th>
+                <th scope="col">Preço</th>
+                <th scope="col">Reservas</th>
+                <th scope="col" class="text-end">Ações</th>
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
+            </thead>
+            <tbody>
+              @for (tour of tours(); track tour.id) {
+                <tr>
+                  <td><strong>{{ tour.nameOfTour }}</strong></td>
+                  <td>{{ tour.countryTour }}</td>
+                  <td>{{ tour.locations }}</td>
+                  <td>{{ tour.kmOftour }} km</td>
+                  <td>{{ tour.price | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+                  <td>
+                    <span class="badge rounded-pill bg-light text-primary">{{ tour.reservationCount }}</span>
+                  </td>
+                  <td class="text-end text-nowrap">
+                    <button type="button" class="btn btn-link btn-sm" (click)="openEditForm(tour)">
+                      Editar
+                    </button>
+                    <button type="button" class="btn btn-link btn-sm text-danger"
+                      (click)="deactivateTour(tour)" >
+                      Desativar
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
   </section>
 
   @if (showForm()) {
-    <div class="form-panel" aria-labelledby="form-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">{{ editingId() === null ? 'Novo cadastro' : 'Atualização' }}</p>
-          <h2 id="form-title">{{ editingId() === null ? 'Cadastrar tour' : 'Editar tour' }}</h2>
+    <section class="card shadow-0 border mt-4" aria-labelledby="form-title">
+      <div class="card-body">
+        <div class="d-flex align-items-start justify-content-between gap-2 mb-4">
+          <div>
+            <p class="eyebrow">{{ editingId() === null ? 'Novo cadastro' : 'Atualização' }}</p>
+            <h2 id="form-title" class="h5 mb-0">
+              {{ editingId() === null ? 'Cadastrar tour' : 'Editar tour' }}
+            </h2>
+          </div>
+          <button type="button" class="btn-close"
+            aria-label="Fechar formulário"  (click)="closeForm()"
+          ></button>
         </div>
-        <button type="button" class="close-button" aria-label="Fechar formulário" (click)="closeForm()">&times;</button>
+
+        @if (formError()) {
+          <div class="alert alert-warning" role="alert">{{ formError() }}</div>
+        }
+
+        <form (ngSubmit)="saveTour()" #tourForm="ngForm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="nameOfTour">Nome do tour</label>
+              <input  id="nameOfTour"  type="text" class="form-control" name="nameOfTour"
+                [(ngModel)]="form.nameOfTour"required  maxlength="120"/>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="countryTour">País</label>
+              <select id="countryTour" class="form-select" name="countryTour"
+                [(ngModel)]="form.countryTour" required >
+                <option value="">Selecione</option>
+                @for (country of countries; track country) {
+                  <option [value]="country">{{ country }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="price">Preço</label>
+              <input id="price" type="number" class="form-control" name="price" [(ngModel)]="form.price" min="0" step="0.01" required  />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="kmOftour">Distância em km</label>
+              <input id="kmOftour" type="number" class="form-control" name="kmOftour" 
+             [(ngModel)]="form.kmOftour" min="0" step="1" required />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label" for="locations">Locais visitados</label>
+              <textarea id="locations" class="form-control" name="locations"
+                [(ngModel)]="form.locations" required maxlength="500" rows="3"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+            <button type="button" class="btn btn-outline-primary" [disabled]="saving()" (click)="closeForm()">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="saving() || tourForm.invalid">
+              {{ saving() ? 'Salvando...' : 'Salvar tour' }}
+            </button>
+          </div>
+        </form>
       </div>
-
-      @if (formError()) {
-        <div class="alert" role="alert">{{ formError() }}</div>
-      }
-
-      <form (ngSubmit)="saveTour()" #tourForm="ngForm">
-        <div class="form-grid">
-          <label>
-            Nome do tour
-            <input type="text" name="nameOfTour" [(ngModel)]="form.nameOfTour" required maxlength="120" />
-          </label>
-          <label>
-            País
-            <select name="countryTour" [(ngModel)]="form.countryTour" required>
-              <option value="">Selecione</option>
-              @for (country of countries; track country) {
-                <option [value]="country">{{ country }}</option>
-              }
-            </select>
-          </label>
-          <label>
-            Preço
-            <input type="number" name="price" [(ngModel)]="form.price" min="0" step="0.01" required />
-          </label>
-          <label>
-            Distância em km
-            <input type="number" name="kmOftour" [(ngModel)]="form.kmOftour" min="0" step="1" required />
-          </label>
-          <label class="wide-field">
-            Locais visitados
-            <textarea name="locations" [(ngModel)]="form.locations" required maxlength="500" rows="3"></textarea>
-          </label>
-        </div>
-        <div class="form-actions">
-          <button type="button" class="secondary-button" [disabled]="saving()" (click)="closeForm()">Cancelar</button>
-          <button type="submit" class="primary-button" [disabled]="saving() || tourForm.invalid">
-            {{ saving() ? 'Salvando...' : 'Salvar tour' }}
-          </button>
-        </div>
-      </form>
-    </div>
+    </section>
   }
 </main>

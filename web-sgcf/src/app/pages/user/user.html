@@ -1,23 +1,168 @@
-  <h1>Usuário</h1>
-  <p>Consultar e editar os dados de usuário.</p>
+<section class="users">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">GESTÃO DE USUÁRIOS</p>
+      <h1>Usuários</h1>
+      <p>Consulte e gerencie os usuários cadastrados.</p>
+    </div>
 
-  <div class="metric-grid" aria-label="Indicadores principais">
-    <article class="metric metric-primary">
-      <span>Nome</span>
-      <strong></strong>
-    </article>
+    @if (currentUser()) {
+  <div class="current-user">
+    <p class="eyebrow">USUÁRIO ATUAL</p>
+    <h2>{{ currentUser()?.userName }}</h2>
+    <p>{{ currentUser()?.email }}</p>
+    <span>{{ currentUser()?.permission }}</span>
+  </div>
+}
 
-    <article class="metric">
-      <span>Email</span>
-      <strong></strong>
-    </article>
+    <div class="header-actions">
+      <button type="button" class="refresh-button" (click)="loadUser()" [disabled]="loading()">
+        {{ loading() ? 'Atualizando...' : 'Atualizar' }}
+      </button>
 
-    <article class="metric">
-      <span>Telefone</span>
-      <strong></strong>
-    </article>
+      <button type="button" class="add-button" (click)="openForm()">
+        Adicionar Usuário
+      </button>
+    </div>
+  </header>
 
-    <article class="metric metric-accent">
-      <span>Data de cadastro</span>
-      <strong></strong>
-    </article>
+  @if (hasError()) {
+    <div class="alert">
+      Não foi possível carregar os usuários.
+    </div>
+  }
+
+  @if (showForm()) {
+    <div class="form-card">
+      <div class="form-header">
+        <div>
+        <p class="eyebrow">NOVO USUÁRIO</p>
+        <h2>Adicionar Usuário</h2>
+        </div>
+        <button type="button" class="close-button" (click)="cancelForm()">
+          x
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="userName">
+            Nome de usuário
+          </label>
+          <input
+            id="userName"
+            type="text"
+            [value]="userName()"
+            (input)="userName.set($any($event.target).value)"
+            placeholder="Digite o nome de usuário"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            [value]="email()"
+            (input)="email.set($any($event.target).value)"
+            placeholder="Digite o email"
+          />
+       </div>
+
+        <div class="form-group">
+          <label for="userPassword">
+            Senha
+        </label>
+          <input
+            id="userPassword"
+            type="password"
+            [value]="userPassword()"
+            (input)="userPassword.set($any($event.target).value)"
+            placeholder="Digite a senha"
+          />
+        </div>
+
+        <div class="form-group">
+        <label for="permission">Permissão</label>
+          <select
+            id="permission"
+            [value]="permission()"
+            (change)="permission.set($any($event.target).value)">
+            <option value="Employee">
+              Funcionário
+            </option>
+            <option value="Manager">
+              Gerente
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="cancelForm()">
+          Cancelar
+        </button>
+
+        <button type="button" class="save-button" (click)="addUser()">
+          Salvar Usuário
+        </button>
+      </div>
+    </div>
+  }
+
+  <div class="table-card">
+    @if (loading()) {
+      <div class="loading">
+        Carregando usuários...
+      </div>
+
+    }
+    @else if (users().length === 0) {
+      <div class="empty">
+        Nenhum usuário encontrado.
+      </div>
+    }
+    @else {
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Permissão</th>
+            <th>Email</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (user of users(); track user.id) {
+            <tr>
+              <td>
+                {{ user.id }}
+              </td>
+              <td>
+                {{ user.userName }}
+              </td>
+              <td>
+                {{ user.permission }}
+              </td>
+              <td>
+                {{ user.email }}
+              </td>
+              <td>
+                <button type="button" class="delete-button" (click)="removeUser(user.id)">
+                  Excluir
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</section>
