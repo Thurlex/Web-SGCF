@@ -1,17 +1,18 @@
 import { registerLocaleData } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import localePt from '@angular/common/locales/pt';
 import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
+import { mockApiInterceptor } from './service/mock-api.interceptor';
 
 registerLocaleData(localePt);
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([mockApiInterceptor])),
     provideRouter(routes),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
   ],
