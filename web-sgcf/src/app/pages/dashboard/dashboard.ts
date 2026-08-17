@@ -89,9 +89,9 @@ export class Dashboard {
     this.hasError.set(false);
 
     forkJoin({
-      customers: this.loadCollection<Customer>('/Customer/findAll'),
-      employees: this.loadCollection<Employee>('/Employee/findAll'),
-      tours: this.loadCollection<Tour>('/Tour/findAll'),
+      customers: this.loadCollection<Customer>('/customer/findAll/active'),
+      employees: this.loadCollection<Employee>('/Employee/findAll/active'),
+      tours: this.loadCollection<Tour>('/Tour/findAll/active'),
       reservations: this.loadCollection<Reservation>('/Reservation/findAll'),
       quotas: this.loadCollection<Quota>('/Quota/findAll'),
     })
