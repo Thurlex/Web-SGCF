@@ -8,7 +8,7 @@ import { Employees } from './pages/employees/employees';
 import { Quotas } from './pages/quotas/quotas';
 import { Reservations } from './pages/reservations/reservations';
 import { Tours } from './pages/tours/tours';
-import { User } from './pages/user/user';
+import { Users } from './pages/user/user';
 
 import { Login } from './pages/login/login';
 import { Layout } from './layout/layout';
@@ -79,7 +79,7 @@ export const routes: Routes = [
 
     {
       path: 'usuario',
-      component: User,
+      component: Users,
       title: 'Usuário | SGCF'
     }
   ]
