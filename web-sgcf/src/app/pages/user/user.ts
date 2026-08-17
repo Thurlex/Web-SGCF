@@ -46,7 +46,7 @@ export class Users {
 
   constructor() {
     this.loadUser();
-    this.currentUser();
+    this.loadCurrentUser();
   }
 
   protected loadUser(): void {

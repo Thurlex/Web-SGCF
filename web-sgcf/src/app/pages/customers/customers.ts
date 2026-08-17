@@ -127,5 +127,4 @@ protected removeCustomer(id: number): void {
       }
     });
 }
-
-    }
+}
