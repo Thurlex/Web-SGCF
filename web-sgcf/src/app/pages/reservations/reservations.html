@@ -40,9 +40,8 @@
           <label for="tours">Passeio</label>
           <select
             id="tours"
-            [value]="tours() ?? ''"
-            (change)="selectTour($any($event.target).value)"
-
+            [value]="tourId() ?? ''"
+            (change)="selectTour($any($event.target).value)">
             <option value="">
               Selecione um passeio
             </option>
