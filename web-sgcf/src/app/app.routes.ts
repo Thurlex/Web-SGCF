@@ -2,8 +2,6 @@ import { Routes } from '@angular/router';
 
 import { Customers } from './pages/customers/customers';
 import { Dashboard } from './pages/dashboard/dashboard';
-import { EditReservation } from './pages/edit-reservation/edit-reservation';
-import { EditReservationStatus } from './pages/edit-reservation-status/edit-reservation-status';
 import { Employees } from './pages/employees/employees';
 import { Quotas } from './pages/quotas/quotas';
 import { Reservations } from './pages/reservations/reservations';
@@ -61,18 +59,6 @@ export const routes: Routes = [
       path: 'reservas',
       component: Reservations,
       title: 'Reservas | SGCF'
-    },
-
-    {
-      path: 'reservas/editar',
-      component: EditReservation,
-      title: 'Editar reserva | SGCF'
-    },
-
-    {
-      path: 'reservas/editar-status',
-      component: EditReservationStatus,
-      title: 'Editar status da reserva | SGCF'
     },
 
     {
