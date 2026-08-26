@@ -20,7 +20,7 @@ import { AuthService } from '../service/auth.service';
   imports: [AppIcon, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class Layout {
   protected readonly sidebarOpen = signal(false);
@@ -46,6 +46,10 @@ export class Layout {
 
   protected closeMobileSidebar(): void {
     this.sidebarOpen.set(false);
+  }
+
+  protected toggleSidebarCollapsed(): void {
+    this.sidebarCollapsed.update((collapsed) => !collapsed);
   }
 
   protected logout(): void {

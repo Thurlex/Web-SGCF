@@ -20,7 +20,7 @@
         type="button"
         [attr.aria-label]="sidebarCollapsed() ? 'Expandir menu' : 'Recolher menu'"
         [title]="sidebarCollapsed() ? 'Expandir menu' : 'Recolher menu'"
-        (click)="sidebarCollapsed.update((collapsed) => !collapsed)"
+        (click)="toggleSidebarCollapsed()"
       >
         <app-icon
           [icon]="sidebarCollapsed() ? icons.PanelLeftOpen : icons.PanelLeftClose"
