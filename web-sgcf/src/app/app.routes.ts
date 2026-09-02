@@ -12,12 +12,18 @@ import { Login } from './pages/login/login';
 import { Layout } from './layout/layout';
 import { authGuard } from './service/auth.guard';
 import { managerGuard } from './service/manager.guard';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 export const routes: Routes = [
   {
   path: 'login',
   component: Login,
   title: 'Login | SGCF'
+},
+{
+  path: 'reset-password',
+  component: ResetPasswordComponent,
+  title: 'Recuperar senha | SGCF'
 },
  {
   path: '',

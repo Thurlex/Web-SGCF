@@ -2,6 +2,7 @@
   <div class="login-card">
     <h1>SGCF</h1>
     <h2>Login</h2>
+    <br>
 
 
         @if (message()) {
@@ -9,35 +10,58 @@
         {{ message() }}
       </div>
     }
+    <br>
+    <form>
+      <br>
+      <mdb-form-control class="mb-4">
+        <input
+        mdbInput type="email"
+          id="form1Example1"
+          class="form-control"
+          placeholder="Digite seu email"
+          [(ngModel)]="email"
+          name="email"/>
+        <label mdbLabel class="form-label" for="form1Example1">Email</label>
+      </mdb-form-control>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input
-        id="email"
-        type="email"
-        placeholder="Digite seu email"
-        [(ngModel)]="email"
-        name="email"
-        />
-    </div>
-
-    <div class="form-group">
-      <label for="password">Senha</label>
-      <input
-        id="password"
-        type="password"
+      <!-- Password input -->
+      <mdb-form-control class="mb-4">
+        <input mdbInput type="password"
+        id="form1Example2"
+        class="form-control"
         placeholder="Digite sua senha"
-       [(ngModel)]="password"
-        name="password"
+        [(ngModel)]="password"
+          name="password"
         />
-    </div>
+        <label mdbLabel class="form-label" for="form1Example2">Senha</label>
+      </mdb-form-control>
 
-    <button type="button" (click)="login()">Entrar</button>
+      <!-- 2 column grid layout for inline styling -->
+      <div class="row mb-4">
+        <div class="col d-flex justify-content-center">
+          <!-- Checkbox -->
+          <div class="form-check">
+            <input
+              mdbCheckbox
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="form1Example3"
+              checked
+            />
+            <label class="form-check-label" for="form1Example3"> Remember me </label>
+          </div>
+        </div>
 
-    <a class="forgot_password" href="#">
-      Esqueceu sua senha?
-    </a>
+        <div class="col">
+          <!-- Simple link -->
+          <a href="reset-password">Esqueceu sua senha?</a>
+        </div>
+      </div>
 
+      <!-- Submit button -->
+      <button mdbRipple type="button" class="btn btn-primary btn-block" (click)="login()">Entrar</button>
+    </form>
   </div>
 
 </div>
