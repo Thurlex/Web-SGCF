@@ -31,10 +31,14 @@ export class Login {
     this.authService.authenticate(request).subscribe({
 
       next: (response) => {
+        console.log(this.email)
+        console.log(this.password)
+        console.log(response);
         if (!response) {
           this.message.set('Usuário ou senha incorretos.');
           return;
         }
+        localStorage.setItem('user', `${this.email }`);
         this.message.set('Bem-vindo.');
         this.router.navigate(['/dashboard']);
       },

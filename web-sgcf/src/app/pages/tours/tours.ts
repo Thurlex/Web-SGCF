@@ -31,7 +31,7 @@ interface TourForm {
 })
 export class Tours {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/Tour';
+  private readonly apiUrl = '/api/tour';
 
   protected readonly tours = signal<Tour[]>([]);
   protected readonly loading = signal(true);

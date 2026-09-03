@@ -14,18 +14,24 @@ export interface AuthenticatedUser {
   email: string;
   employeeId: number | null;
 }
+export interface AuthenticateEmail {
+  email: string;
+
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = '/api/User';
+  private apiUrl = '/api/user';
+
 
   constructor(private http: HttpClient) {}
 
-  authenticate(request: AuthenticateRequest): Observable<AuthenticatedUser> {
-    return this.http.post<AuthenticatedUser>(
+  authenticate(request: AuthenticateRequest): Observable<boolean> {
+    console.log(`${this.apiUrl}/authenticate`)
+    return this.http.post<boolean>(
       `${this.apiUrl}/authenticate`,
       request,
       { withCredentials: true }
@@ -33,10 +39,16 @@ export class AuthService {
   }
 
   session(): Observable<AuthenticatedUser> {
-    return this.http.get<AuthenticatedUser>(`${this.apiUrl}/session`, { withCredentials: true });
-  }
+  const emailStored = localStorage.getItem('user') ?? '';
 
-  logout(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/logout`, null, { withCredentials: true });
+  const request: AuthenticateEmail = {
+    email: emailStored
+  };
+
+  return this.http.post<AuthenticatedUser>(`${this.apiUrl}/is-manager`, request);
+}
+
+  logout(): void {
+    localStorage.removeItem('user');
   }
 }

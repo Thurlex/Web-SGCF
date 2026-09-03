@@ -48,7 +48,7 @@ interface ReservationRequest {
 })
 export class Reservations {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/Reservation';
+  private readonly apiUrl = '/api/reservation';
 
   protected readonly loading = signal(true);
   protected readonly hasError = signal(false);
@@ -119,7 +119,7 @@ export class Reservations {
 
   private loadTours(): void {
     this.http
-      .get<Tour[]>('/api/Tour/findAll')
+      .get<Tour[]>('/api/tour/findAll')
       .subscribe({
         next: data => {
           console.log('Tours:', data);
@@ -147,7 +147,7 @@ export class Reservations {
 
   private loadEmployees(): void {
     this.http
-      .get<Employee[]>('/api/Employee/findAll')
+      .get<Employee[]>('/api/employee/findAll')
       .subscribe({
         next: data => {
           console.log('Funcionários:', data);

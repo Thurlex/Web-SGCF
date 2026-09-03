@@ -14,6 +14,7 @@ import {
 } from 'lucide';
 import { AppIcon } from '../shared/app-icon';
 import { AuthService } from '../service/auth.service';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-layout',
@@ -53,9 +54,17 @@ export class Layout {
   }
 
   protected logout(): void {
-    this.authService.logout().subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: () => this.router.navigate(['/login']),
+    Swal.fire({
+      title: "Deseja sair do sistema?",
+      showCancelButton: true,
+      confirmButtonText: "Sair",
+      cancelButtonText : "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed){
+          Swal.fire("Voce saiu do sistema");
+          this.router.navigate(["/login"]);
+          this.authService.logout();
+        }
     });
   }
 }

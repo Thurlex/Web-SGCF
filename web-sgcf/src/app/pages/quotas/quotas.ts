@@ -36,7 +36,7 @@ interface QuotaForm {
 export class Quotas {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AuthService);
-  private readonly apiUrl = '/api/Quota';
+  private readonly apiUrl = '/api/quota';
 
   protected readonly quotas = signal<QuotaProgress[]>([]);
   protected readonly employees = signal<Employee[]>([]);
@@ -64,8 +64,8 @@ export class Quotas {
     this.hasError.set(false);
 
     forkJoin({
-      quotas: this.http.get<QuotaProgress[]>(`${this.apiUrl}/findAll/progress`),
-      employees: this.http.get<Employee[]>('/api/Employee/findAll/active'),
+      quotas: this.http.get<QuotaProgress[]>(`${this.apiUrl}/findAll/active`),
+      employees: this.http.get<Employee[]>('/api/employee/findAll/active'),
     })
       .pipe(
         catchError(() => {

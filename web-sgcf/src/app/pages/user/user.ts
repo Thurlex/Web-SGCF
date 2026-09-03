@@ -26,7 +26,7 @@ interface UserRequest {
 })
 export class Users {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/User';
+  private readonly apiUrl = '/api/user';
   private readonly authService = inject(AuthService);
 
   protected readonly loading = signal(true);
