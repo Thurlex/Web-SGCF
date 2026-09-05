@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="card">
+    <h2>Recuperar senha</h2>
+
+    <form>
+      @if (tokenIsTrue === false) {
+        <mdb-form-control class="mb-4">
+          <input mdbInput type="email"
+          id="form1Example1"
+          class="form-control"
+          [(ngModel)] = "email"
+          name="email"/>
+          <label mdbLabel class="form-label" for="form1Example1">Digite seu email</label>
+        </mdb-form-control>
+
+        <mdb-form-control class="mb-4">
+          <input mdbInput type="text"
+          id="form1Example1"
+          class="form-control"
+          [(ngModel)] = "tokem"
+          name="tokem" />
+          <label mdbLabel class="form-label" for="form1Example1">Digite seu tokem</label>
+        </mdb-form-control>
+
+        <button mdbRipple type="button" class="btn btn-primary btn-block" (click)="compreTokem()">Enviar</button>
+      }@else{
+
+        <mdb-form-control class="mb-4">
+          <input mdbInput type="password"
+          id="form1Example2"
+          class="form-control"
+          [(ngModel)] = "newPassword"
+          name="newPassword"/>
+          <label mdbLabel class="form-label" for="form1Example2">Password</label>
+        </mdb-form-control>
+
+        <button mdbRipple type="button" class="btn btn-primary btn-block" (click)="trocarSenha()">Enviar</button>
+      }
+
+    </form>
+  </div>
+
+</div>
+
