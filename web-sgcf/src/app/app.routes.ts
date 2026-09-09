@@ -8,11 +8,12 @@ import { Reservations } from './pages/reservations/reservations';
 import { Tours } from './pages/tours/tours';
 import { Users } from './pages/user/user';
 
-import { Login } from './pages/login/login';
+import { Login } from './pages/login-pages/login/login';
 import { Layout } from './layout/layout';
 import { authGuard } from './service/auth.guard';
 import { managerGuard } from './service/manager.guard';
-import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { ResetPasswordComponent } from './pages/login-pages/reset-password/reset-password.component';
+import { CompareTokemComponent } from './pages/login-pages/compare-tokem/compare-tokem.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,11 @@ export const routes: Routes = [
 {
   path: 'reset-password',
   component: ResetPasswordComponent,
+  title: 'Recuperar senha | SGCF'
+},
+{
+  path: 'compare-tokem',
+  component: CompareTokemComponent,
   title: 'Recuperar senha | SGCF'
 },
  {

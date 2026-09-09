@@ -46,7 +46,7 @@ export class AuthService {
   };
 
   return this.http.post<AuthenticatedUser>(`${this.apiUrl}/is-manager`, request);
-}
+  }
 
   logout(): void {
     localStorage.removeItem('user');

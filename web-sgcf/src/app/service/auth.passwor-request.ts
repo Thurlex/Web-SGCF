@@ -5,6 +5,21 @@ import { Observable } from 'rxjs';
 export interface PasswordResetRequest {
   email: string;
 }
+
+export interface TokenRequest {
+  email: string;
+  token: string;
+}
+
+export interface booleanReturn {
+  message: string;
+  bool: boolean;
+}
+
+export interface changePasswordRequest{
+  email: string;
+  password: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +29,15 @@ export class resetPassword{
 
   constructor(private http: HttpClient) {}
 
-  request(request : PasswordResetRequest): Observable<PasswordResetRequest>{
-    return this.http.post<PasswordResetRequest>(`${this.url}/request`, request)
+  request(request : PasswordResetRequest): Observable<string>{
+    return this.http.post<string>(`${this.url}/request`, request)
+  }
+
+  compareTokem(request : TokenRequest): Observable<booleanReturn>{
+        return this.http.post<booleanReturn>(`${this.url}/compareToken`, request)
+  }
+
+  changePassword(request : changePasswordRequest): Observable<booleanReturn>{
+    return this.http.patch<booleanReturn>(`api/user/change`, request)
   }
 }
