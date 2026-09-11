@@ -60,6 +60,14 @@
         <span>Metas</span>
       </a>
 
+      <!-- apenas gerente -->
+      @if (isManager()) {
+        <a routerLink="/logs" routerLinkActive="active" (click)="closeMobileSidebar()">
+          <app-icon [icon]="icons.ScrollText" />
+          <span>Logs</span>
+        </a>
+      }
+
     </nav>
 
     <a

@@ -6,6 +6,7 @@ import {
   Map,
   Menu,
   LogOut,
+  ScrollText,
   PanelLeftClose,
   PanelLeftOpen,
   Target,
@@ -24,6 +25,7 @@ import Swal from 'sweetalert2'
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class Layout {
+  protected readonly isManager = signal(false);
   protected readonly sidebarOpen = signal(false);
   protected readonly sidebarCollapsed = signal(false);
 
@@ -33,6 +35,7 @@ export class Layout {
     Map,
     Menu,
     LogOut,
+    ScrollText,
     PanelLeftClose,
     PanelLeftOpen,
     Target,
@@ -43,7 +46,12 @@ export class Layout {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
-  ) {}
+  ) {
+    this.authService.session().subscribe({
+      next: (user) => this.isManager.set(user.permission === 'Manager'),
+      error: () => this.isManager.set(false),
+    });
+  }
 
   protected closeMobileSidebar(): void {
     this.sidebarOpen.set(false);

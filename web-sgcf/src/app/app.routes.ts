@@ -7,6 +7,7 @@ import { Quotas } from './pages/quotas/quotas';
 import { Reservations } from './pages/reservations/reservations';
 import { Tours } from './pages/tours/tours';
 import { Users } from './pages/user/user';
+import { Logs } from './pages/logs/logs';
 
 import { Login } from './pages/login-pages/login/login';
 import { Layout } from './layout/layout';
@@ -83,6 +84,13 @@ export const routes: Routes = [
       path: 'usuario',
       component: Users,
       title: 'Usuário | SGCF'
+    },
+
+    {
+      path: 'logs',
+      component: Logs,
+      canActivate: [managerGuard],//apenas o gerente pode acessar os logs(tem que definir isso aiinda)
+      title: 'Logs do sistema | SGCF'
     }
   ]
 }
