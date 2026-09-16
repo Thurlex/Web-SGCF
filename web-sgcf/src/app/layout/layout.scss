@@ -10,37 +10,23 @@
   transition: grid-template-columns 220ms ease;
 }
 
-.sidebar {
+.sidenav {
   position: sticky;
   top: 0;
   z-index: 20;
   display: flex;
   flex-direction: column;
   height: 100dvh;
-  overflow: hidden;
-  color: #eef7f9;
+  overflow: hidden auto;
   background: #123f51;
 }
 
 .brand-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   height: 5.25rem;
-  padding: 0 1rem 0 1.25rem;
   border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  color: inherit;
-  text-decoration: none;
-}
-
 .brand-mark {
-  display: grid;
   flex: 0 0 2.25rem;
   width: 2.25rem;
   height: 2.25rem;
@@ -53,73 +39,41 @@
 
 .brand-copy,
 .profile-copy {
-  display: grid;
-  gap: 0.15rem;
-  margin-left: 0.75rem;
   white-space: nowrap;
 }
 
-.brand-copy strong {
-  font-family: var(--font-family);
-  font-size: 1.15rem;
-}
-
-.brand-copy small,
-.profile-copy small {
-  color: #a9c8d2;
-  font-size: 0.72rem;
-}
-
-.icon-button {
-  display: inline-grid;
-  flex: 0 0 2.5rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0;
-  place-items: center;
-  border: 0;
-  color: inherit;
-  background: transparent;
-  cursor: pointer;
-}
-
-.icon-button:hover {
-  background: rgb(255 255 255 / 10%);
-}
-
-.nav-list {
-  display: grid;
-  gap: 0.35rem;
+.sidenav-menu{
   padding: 1.25rem 0.75rem;
 }
 
-.nav-list a,
-
-.profile-link {
+.sidenav-menu .sidenav-link,
+.profile-link,
+.logout-button{
   display: flex;
   align-items: center;
   min-height: 2.9rem;
   padding: 0 0.875rem;
   border-left: 3px solid transparent;
+  border-radius: 0;
   color: #c9dde4;
-  text-decoration: none;
   white-space: nowrap;
 }
 
-.nav-list a:hover,
+.sidenav-menu .sidenav-link:hover,
 .profile-link:hover,
-.nav-list a.active,
+.logout-button:hover,
+.sidenav-menu .sidenav-link.active,
 .profile-link.active {
   color: #ffffff;
   background: rgb(255 255 255 / 9%);
 }
 
-.nav-list a.active,
+.sidenav-menu .sidenav-link.active,
 .profile-link.active {
-  border-left-color: #f2bd4e;
+  border-left-color: var(--color-accent);
 }
 
-.nav-list app-icon {
+app-icon {
   flex: 0 0 1.25rem;
   margin-right: 0.9rem;
 }
@@ -130,23 +84,14 @@
 }
 
 .logout-button {
-  display: flex;
-  align-items: center;
   gap: 0.9rem;
-  min-height: 2.9rem;
+  width: calc(100% - 1.5rem);
   margin: 0 0.75rem 1rem;
-  padding: 0 0.875rem;
   border: 0;
-  color: #c9dde4;
   background: transparent;
   cursor: pointer;
   font: inherit;
   text-align: left;
-}
-
-.logout-button:hover {
-  color: #ffffff;
-  background: rgb(255 255 255 / 9%);
 }
 
 .avatar {
@@ -154,14 +99,11 @@
   flex: 0 0 2rem;
   height: 2rem;
   place-items: center;
-  background: #f2bd4e;
+  background: var(--color-accent);
   color: #123f51;
+  border-radius: 50%;
   font-size: 0.7rem;
   font-weight: 800;
-}
-
-.profile-copy strong {
-  font-size: 0.82rem;
 }
 
 .workspace {
@@ -185,7 +127,7 @@
 
 .sidebar-collapsed .brand-copy,
 .sidebar-collapsed .profile-copy,
-.sidebar-collapsed .nav-list span,
+.sidebar-collapsed .sidenav-menu span,
 .sidebar-collapsed .logout-button span,
 .sidebar-collapsed .brand-mark {
   display: none;
@@ -200,19 +142,15 @@
   display: none;
 }
 
-.sidebar-collapsed .nav-list a,
+.sidebar-collapsed .sidenav-menu .sidenav-link,
 .sidebar-collapsed .profile-link,
 .sidebar-collapsed .logout-button {
   justify-content: center;
   padding-inline: 0;
 }
 
-.sidebar-collapsed .nav-list app-icon {
+.sidebar-collapsed app-icon {
   margin-right: 0;
-}
-
-.sidebar-collapsed .logout-button {
-  justify-content: center;
 }
 
 @media (max-width: 48rem) {
@@ -221,7 +159,7 @@
     display: block;
   }
 
-  .sidebar {
+  .sidenav {
     position: fixed;
     left: 0;
     width: min(17rem, 84vw);
@@ -229,7 +167,7 @@
     transition: transform 220ms ease;
   }
 
-  .sidebar-open .sidebar {
+  .sidebar-open .sidenav {
     transform: translateX(0);
   }
 
@@ -237,29 +175,25 @@
   .sidebar-collapsed .brand-mark,
   .sidebar-collapsed .brand-copy,
   .sidebar-collapsed .profile-copy,
-  .sidebar-collapsed .nav-list span,
+  .sidebar-collapsed .sidenav-menu span,
   .sidebar-collapsed .logout-button span {
     display: flex;
   }
 
   .sidebar-collapsed .brand-row {
     justify-content: space-between;
-    padding: 0 1rem 0 1.25rem;
+    padding-inline: 1rem 0.75rem;
   }
 
-  .sidebar-collapsed .nav-list a,
+  .sidebar-collapsed .sidenav-menu .sidenav-link,
   .sidebar-collapsed .profile-link,
   .sidebar-collapsed .logout-button {
     justify-content: flex-start;
     padding-inline: 0.875rem;
   }
 
-  .sidebar-collapsed .nav-list app-icon {
+  .sidebar-collapsed app-icon {
     margin-right: 0.9rem;
-  }
-
-  .sidebar-collapsed .logout-button {
-    justify-content: flex-start;
   }
 
   .sidebar-backdrop {
@@ -281,20 +215,9 @@
 
   .mobile-header {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
     height: 3.75rem;
-    padding-inline: 0.75rem;
     border-bottom: 1px solid var(--color-border);
-    color: var(--color-primary);
     background: var(--color-surface);
-  }
-
-  .mobile-brand {
-    color: var(--color-primary);
-    font-family: var(--font-family);
-    font-weight: 800;
-    text-decoration: none;
   }
 
   .app-content {

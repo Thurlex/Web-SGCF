@@ -11,7 +11,7 @@ import {
   Target,
   UserRound,
   UsersRound,
-} from 'lucide';
+} from 'lucide-angular';
 import { AppIcon } from '../shared/app-icon';
 import { AuthService } from '../service/auth.service';
 
@@ -20,7 +20,7 @@ import { AuthService } from '../service/auth.service';
   imports: [AppIcon, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Layout {
   protected readonly sidebarOpen = signal(false);
