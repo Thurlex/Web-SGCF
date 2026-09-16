@@ -12,7 +12,7 @@ import {
   Target,
   UserRound,
   UsersRound,
-} from 'lucide';
+} from 'lucide-angular';
 import { AppIcon } from '../shared/app-icon';
 import { AuthService } from '../service/auth.service';
 import Swal from 'sweetalert2'
@@ -22,7 +22,11 @@ import Swal from 'sweetalert2'
   imports: [AppIcon, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
+<<<<<<< HEAD
   changeDetection: ChangeDetectionStrategy.Default,
+=======
+  changeDetection: ChangeDetectionStrategy.OnPush,
+>>>>>>> fd51184 (change the layout for md architecture)
 })
 export class Layout {
   protected readonly isManager = signal(false);
