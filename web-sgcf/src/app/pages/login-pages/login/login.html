@@ -1,52 +1,52 @@
-<div class="login-container">
-  <div class="login-card">
-    <h1>SGCF</h1>
-    <h2>Login</h2>
+<div class="login-wrapper d-flex align-items-center justify-content-center">
+  <div class="card shadow-3 login-card">
+    <div class="card-body p-4 p-md-5">
+    <h1 class="text-center brand-title mb-1">SGCF</h1>
+    <h2 class="text-center h5 text-body-secondary mb-4">Login</h2>
     <br>
 
 
         @if (message()) {
-      <div class="message">
+      <div class="alert alert-warning text-center py-2" role="alert">
         {{ message() }}
       </div>
     }
-    <br>
-    <form>
-      <br>
-      <mdb-form-control class="mb-4">
+   
+    <div class="form-floating mb-3">
         <input
-        mdbInput type="email"
-          id="form1Example1"
+          type="email"
+          id="email"
           class="form-control"
           placeholder="Digite seu email"
           [(ngModel)]="email"
-          name="email"/>
-        <label mdbLabel class="form-label" for="form1Example1">Email</label>
-      </mdb-form-control>
+          name="email"
+          />
+        <label for="email">Email</label>
+        </div>
 
       <!-- Password input -->
-      <mdb-form-control class="mb-4">
-        <input mdbInput type="password"
-        id="form1Example2"
+      <div class="form-floating mb-4">
+        <input 
+        type="password"
+        id="password"
         class="form-control"
         placeholder="Digite sua senha"
         [(ngModel)]="password"
           name="password"
         />
-        <label mdbLabel class="form-label" for="form1Example2">Senha</label>
-      </mdb-form-control>
-
-      <!-- 2 column grid layout for inline styling -->
-      <div class="row mb-4">
-        <div class="col">
-          <!-- Simple link -->
-          <a href="reset-password">Esqueceu sua senha?</a>
-        </div>
+        <label for="password">Senha</label>
       </div>
 
-      <!-- Submit button -->
-      <button mdbRipple type="button" class="btn btn-primary btn-block" (click)="login()">Entrar</button>
-    </form>
-  </div>
+       <!-- Submit button -->
+      <button type="button" class="btn btn-primary w-100" (click)="login()">
+        Entrar
+      </button>
 
+      <!-- 2 column grid layout for inline styling -->
+      <a class="d-block text-center mt-3 small" href="#">
+        Esqueceu sua senha?
+      </a>
+
+    </div>
+  </div>
 </div>
