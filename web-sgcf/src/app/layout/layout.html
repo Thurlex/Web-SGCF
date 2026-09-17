@@ -3,23 +3,24 @@
   [class.sidebar-collapsed]="sidebarCollapsed()"
   [class.sidebar-open]="sidebarOpen()"
 >
-  <aside class="sidenav text-white" aria-label="Navegação principal">
+  <aside class="sidebar" aria-label="Navegação principal">
 
-    <div class="d-flex align-items-center justify-content-between brand-row px-3">
-      <a class="brand d-flex align-items-center text-white text-decoration-none" routerLink="/dashboard" (click)="closeMobileSidebar()">
-        <span class="brand-mark d-inline-grid">S</span>
-        <span class="brand-copy ms-3">
-          <strong class="d-block">SGCF</strong>
-          <small class="text-white-50">Gestão de turismo</small>
+    <div class="brand-row">
+      <a class="brand" routerLink="/dashboard" (click)="closeMobileSidebar()">
+        <span class="brand-mark">S</span>
+
+        <span class="brand-copy">
+          <strong>SGCF</strong>
+          <small>Gestão de turismo</small>
         </span>
       </a>
 
       <button
-        class="btn btn-link text-white p-2"
+        class="icon-button collapse-button"
         type="button"
         [attr.aria-label]="sidebarCollapsed() ? 'Expandir menu' : 'Recolher menu'"
         [title]="sidebarCollapsed() ? 'Expandir menu' : 'Recolher menu'"
-        (click)="toggleSidebarCollapsed()"
+        (click)="sidebarCollapsed.update((collapsed) => !collapsed)"
       >
         <app-icon
           [icon]="sidebarCollapsed() ? icons.PanelLeftOpen : icons.PanelLeftClose"
@@ -27,7 +28,6 @@
       </button>
     </div>
 
-<<<<<<< HEAD
     <nav class="nav-list">
 
       <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileSidebar()">
@@ -60,70 +60,23 @@
         <span>Metas</span>
       </a>
 
-      <!-- apenas gerente -->
-      @if (isManager()) {
-        <a routerLink="/logs" routerLinkActive="active" (click)="closeMobileSidebar()">
-          <app-icon [icon]="icons.ScrollText" />
-          <span>Logs</span>
-        </a>
-      }
-
     </nav>
-=======
-    <ul class="sidenav-menu">
-      <li class="sidenav-item">
-        <a class="sidenav-link" routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileSidebar()">
-          <app-icon [icon]="icons.CircleGauge" />
-          <span>Painel</span>
-        </a>
-      </li>
-      <li class="sidenav-item">
-        <a class="sidenav-link" routerLink="/reservas" routerLinkActive="active" (click)="closeMobileSidebar()">
-          <app-icon [icon]="icons.CalendarDays" />
-          <span>Reservas</span>
-        </a>
-      </li>
-      <li class="sidenav-item">
-        <a class="sidenav-link" routerLink="/clientes" routerLinkActive="active" (click)="closeMobileSidebar()">
-          <app-icon [icon]="icons.UsersRound" />
-          <span>Clientes</span>
-        </a>
-      </li>
-      <li class="sidenav-item">
-        <a class="sidenav-link" routerLink="/funcionarios" routerLinkActive="active" (click)="closeMobileSidebar()">
-          <app-icon [icon]="icons.UserRound" />
-          <span>Funcionários</span>
-        </a>
-      </li>
-      <li class="sidenav-item">
-        <a class="sidenav-link" routerLink="/tours" routerLinkActive="active" (click)="closeMobileSidebar()">
-          <app-icon [icon]="icons.Map" />
-          <span>Tours</span>
-        </a>
-      </li>
-      <li class="sidenav-item">
-        <a class="sidenav-link" routerLink="/metas" routerLinkActive="active" (click)="closeMobileSidebar()">
-          <app-icon [icon]="icons.Target" />
-          <span>Metas</span>
-        </a>
-      </li>
-    </ul>
->>>>>>> fd51184 (change the layout for md architecture)
 
     <a
-      class="sidenav-link profile-link"
+      class="profile-link"
       routerLink="/usuario"
       routerLinkActive="active"
       (click)="closeMobileSidebar()"
     >
       <span class="avatar">AD</span>
+
       <span class="profile-copy">
-        <strong class="d-block">Minha conta</strong>
-        <small class="text-white-50">Perfil do usuário</small>
+        <strong>Minha conta</strong>
+        <small>Perfil do usuário</small>
       </span>
     </a>
 
-    <button class="sidenav-link logout-button" type="button" (click)="logout()">
+    <button class="logout-button" type="button" (click)="logout()">
       <app-icon [icon]="icons.LogOut" />
       <span>Sair</span>
     </button>
@@ -139,9 +92,10 @@
 
   <div class="workspace">
 
-    <header class="mobile-header d-flex align-items-center gap-2 px-3">
+    <header class="mobile-header">
+
       <button
-        class="btn btn-link text-primary p-2"
+        class="icon-button"
         type="button"
         aria-label="Abrir menu"
         title="Abrir menu"
@@ -150,9 +104,10 @@
         <app-icon [icon]="icons.Menu" />
       </button>
 
-      <a class="mobile-brand text-primary fw-bold text-decoration-none" routerLink="/dashboard">
+      <a class="mobile-brand" routerLink="/dashboard">
         SGCF
       </a>
+
     </header>
 
     <main class="app-content">
