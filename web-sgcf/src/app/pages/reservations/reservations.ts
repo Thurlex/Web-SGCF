@@ -1,3 +1,5 @@
+// mudar aqui: criar um service em service/<nome>.service.ts e um model em models/<nome>.ts
+// e trocar as chamadas this.http por esse service (exemplo pronto em tours.ts e customers.ts)
 import { HttpClient } from '@angular/common/http';
 import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';

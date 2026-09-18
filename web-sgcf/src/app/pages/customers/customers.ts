@@ -1,41 +1,31 @@
-import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Component, TemplateRef, ViewChild, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
+import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { of } from 'rxjs';
 import { catchError, finalize} from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
-interface Customer {
-  id: number;
-  cnpj: string;
-  cpf: string;
-  name: string;
-  languageSpeak: string[];
-  countryCustomer: string;
-  email: string;
-}
-
-interface CustomerRequest {
-  cnpj: string;
-  cpf: string;
-  name: string;
-  languageSpeak: string[];
-  countryCustomer: string;
-  email: string;
-}
+import { Customer, CustomerRequest } from '../../models/customer';
+import { CustomerService } from '../../service/customer.service';
 
 @Component({
   selector: 'app-customers',
+  imports: [FormsModule, MdbFormsModule, MdbModalModule],
   templateUrl: './customers.html',
   styleUrl: './customers.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Customers {
-  private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/customer';
+  private readonly customerService = inject(CustomerService);
+  private readonly modalService = inject(MdbModalService);
+
+  @ViewChild('modalCustomer') modalCustomer!: TemplateRef<any>;
+
+  modalRef!: MdbModalRef<any>;
 
   protected readonly loading = signal(true);
   protected readonly hasError = signal(false);
   protected readonly customers = signal<Customer[]>([]);
-  protected readonly showForm = signal(false);
 
   protected readonly name = signal('');
   protected readonly email = signal('');
@@ -49,82 +39,91 @@ export class Customers {
   }
 
   protected loadCustomers(): void {
-  this.loading.set(true);
-  this.hasError.set(false);
+    this.loading.set(true);
+    this.hasError.set(false);
 
-  this.http
-    .get<Customer[]>(`${this.apiUrl}/findAll/active`)
-    .pipe(
-      catchError(() => {
-        this.hasError.set(true);
-        return of([] as Customer[]);
-      }),
-      finalize(() => this.loading.set(false))
-    )
-    .subscribe((data) => this.customers.set(data));
-}
-
-protected openForm(): void {
-  this.showForm.set(true);
-}
-
-protected cancelForm(): void {
-  this.showForm.set(false);
-}
-
-protected toggleLanguage(language: string): void {
-  const languages = this.languageSpeak();
-
-  if (languages.includes(language)) {
-    this.languageSpeak.set(
-      languages.filter((item) => item !== language)
-    );
-  } else {
-    this.languageSpeak.set([...languages, language]);
+    this.customerService
+      .findAllActive()
+      .pipe(
+        catchError(() => {
+          this.hasError.set(true);
+          return of([] as Customer[]);
+        }),
+        finalize(() => this.loading.set(false))
+      )
+      .subscribe((data) => this.customers.set(data));
   }
-}
 
-protected addCustomer(): void {
-  const customer: CustomerRequest = {
-    cnpj: this.cnpj(),
-    cpf: this.cpf(),
-    name: this.name(),
-    languageSpeak: this.languageSpeak(),
-    countryCustomer: this.countryCustomer(),
-    email: this.email()
-  };
+  protected openForm(): void {
+    this.name.set('');
+    this.email.set('');
+    this.cpf.set('');
+    this.cnpj.set('');
+    this.countryCustomer.set('Brazil');
+    this.languageSpeak.set([]);
 
-  this.http
-    .post(`${this.apiUrl}/save`, customer, {
-      responseType: 'text'
-    })
-    .subscribe({
-      next: () => {
-        this.showForm.set(false);
-        this.loadCustomers();
-      },
-      error: (error) => {
-        console.error('Erro ao adicionar cliente:', error);
-        console.error('Status:', error.status);
-  console.error('Resposta do servidor:', error.error);
+    this.modalRef = this.modalService.open(this.modalCustomer);
+  }
+
+  protected cancelForm(): void {
+    this.modalRef.close();
+  }
+
+  protected toggleLanguage(language: string): void {
+    const languages = this.languageSpeak();
+
+    if (languages.includes(language)) {
+      this.languageSpeak.set(
+        languages.filter((item) => item !== language)
+      );
+    } else {
+      this.languageSpeak.set([...languages, language]);
+    }
+  }
+
+  protected addCustomer(): void {
+    const customer: CustomerRequest = {
+      cnpj: this.cnpj(),
+      cpf: this.cpf(),
+      name: this.name(),
+      languageSpeak: this.languageSpeak(),
+      countryCustomer: this.countryCustomer(),
+      email: this.email()
+    };
+
+    this.customerService
+      .save(customer)
+      .subscribe({
+        next: () => {
+          this.modalRef.close();
+          Swal.fire('Cliente cadastrado com sucesso.');
+          this.loadCustomers();
+        },
+        error: () => Swal.fire('Nao foi possivel cadastrar o cliente. Verifique os dados.')
+      });
+  }
+
+  protected removeCustomer(id: number): void {
+    Swal.fire({
+      title: 'Remover este cliente?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, remover',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.customerService
+          .delete(id)
+          .subscribe({
+            next: () => {
+              this.customers.update(customers =>
+                customers.filter(customer => customer.id !== id)
+              );
+              Swal.fire('Cliente removido com sucesso.');
+            },
+            error: () => Swal.fire('Nao foi possivel remover o cliente.')
+          });
       }
     });
-}
-
-protected removeCustomer(id: number): void {
-  this.http
-    .delete(`${this.apiUrl}/delete/${id}`, {
-      responseType: 'text'
-    })
-    .subscribe({
-      next: () => {
-        this.customers.update(customers =>
-          customers.filter(customer => customer.id !== id)
-        );
-      },
-      error: (error) => {
-        console.error('Erro ao remover cliente:', error);
-      }
-    });
-}
+  }
 }

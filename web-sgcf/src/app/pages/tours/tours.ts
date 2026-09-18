@@ -1,46 +1,34 @@
 import { CurrencyPipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Component, TemplateRef, ViewChild, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
+import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { catchError, finalize, of } from 'rxjs';
+import Swal from 'sweetalert2';
 
-interface Tour {
-  id: number;
-  price: number;
-  countryTour: string;
-  kmOftour: number;
-  nameOfTour: string;
-  locations: string;
-  reservationCount: number;
-}
-
-interface TourForm {
-  price: number | null;
-  countryTour: string;
-  kmOftour: number | null;
-  nameOfTour: string;
-  locations: string;
-}
+import { Tour, TourForm } from '../../models/tour';
+import { TourService } from '../../service/tour.service';
 
 @Component({
   selector: 'app-tours',
-  imports: [CurrencyPipe, FormsModule],
+  imports: [CurrencyPipe, FormsModule, MdbFormsModule, MdbModalModule],
   templateUrl: './tours.html',
   styleUrl: './tours.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Tours {
-  private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/tour';
+  private readonly tourService = inject(TourService);
+  private readonly modalService = inject(MdbModalService);
+
+  @ViewChild('modalTour') modalTour!: TemplateRef<any>;
+
+  modalRef!: MdbModalRef<any>;
 
   protected readonly tours = signal<Tour[]>([]);
   protected readonly loading = signal(true);
   protected readonly saving = signal(false);
   protected readonly hasError = signal(false);
-  protected readonly feedback = signal('');
   protected readonly formError = signal('');
   protected readonly editingId = signal<number | null>(null);
-  protected readonly showForm = signal(false);
 
   protected readonly countries = ['Argentina', 'Brazil', 'Paraguay'];
   protected form: TourForm = this.emptyForm();
@@ -53,8 +41,8 @@ export class Tours {
     this.loading.set(true);
     this.hasError.set(false);
 
-    this.http
-      .get<Tour[]>(`${this.apiUrl}/findAll/active`)
+    this.tourService
+      .findAllActive()
       .pipe(
         catchError(() => {
           this.hasError.set(true);
@@ -69,8 +57,7 @@ export class Tours {
     this.editingId.set(null);
     this.form = this.emptyForm();
     this.formError.set('');
-    this.feedback.set('');
-    this.showForm.set(true);
+    this.modalRef = this.modalService.open(this.modalTour);
   }
 
   protected openEditForm(tour: Tour): void {
@@ -83,13 +70,12 @@ export class Tours {
       locations: tour.locations,
     };
     this.formError.set('');
-    this.feedback.set('');
-    this.showForm.set(true);
+    this.modalRef = this.modalService.open(this.modalTour);
   }
 
   protected closeForm(): void {
     if (!this.saving()) {
-      this.showForm.set(false);
+      this.modalRef.close();
     }
   }
 
@@ -102,11 +88,10 @@ export class Tours {
 
     this.saving.set(true);
     this.formError.set('');
-    this.feedback.set('');
     const id = this.editingId();
     const request = id === null
-      ? this.http.post(`${this.apiUrl}/save`, this.form, { responseType: 'text' })
-      : this.http.post(`${this.apiUrl}/update/${id}`, this.form, { responseType: 'text' });
+      ? this.tourService.save(this.form)
+      : this.tourService.update(id, this.form);
 
     request
       .pipe(
@@ -120,31 +105,37 @@ export class Tours {
         if (response === null) {
           return;
         }
-        this.showForm.set(false);
-        this.feedback.set(id === null ? 'Tour cadastrado com sucesso.' : 'Tour atualizado com sucesso.');
+        this.modalRef.close();
+        Swal.fire(id === null ? 'Tour cadastrado com sucesso.' : 'Tour atualizado com sucesso.');
         this.loadTours();
       });
   }
 
   protected deactivateTour(tour: Tour): void {
-    if (!confirm(`Desativar o tour "${tour.nameOfTour}"?`)) {
-      return;
-    }
-
-    this.http
-      .delete(`${this.apiUrl}/delete/${tour.id}`, { responseType: 'text' })
-      .pipe(
-        catchError(() => {
-          this.hasError.set(true);
-          return of(null);
-        }),
-      )
-      .subscribe((response) => {
-        if (response !== null) {
-          this.feedback.set('Tour desativado com sucesso.');
-          this.loadTours();
-        }
-      });
+    Swal.fire({
+      title: 'Desativar o tour ' + tour.nameOfTour + '?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, desativar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tourService
+          .delete(tour.id)
+          .pipe(
+            catchError(() => {
+              this.hasError.set(true);
+              return of(null);
+            }),
+          )
+          .subscribe((response) => {
+            if (response !== null) {
+              Swal.fire('Tour desativado com sucesso.');
+              this.loadTours();
+            }
+          });
+      }
+    });
   }
 
   private validateForm(): string {
