@@ -12,7 +12,7 @@ import {
   Target,
   UserRound,
   UsersRound,
-} from 'lucide-angular';
+} from 'lucide';
 import { AppIcon } from '../shared/app-icon';
 import { AuthService } from '../service/auth.service';
 import Swal from 'sweetalert2'
@@ -22,7 +22,7 @@ import Swal from 'sweetalert2'
   imports: [AppIcon, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class Layout {
   protected readonly isManager = signal(false);
