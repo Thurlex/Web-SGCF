@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, effect, input, viewChild } from '@angular/core';
-import { createElement, type IconNode } from 'lucide';
+import { createElement, IconNode } from 'lucide';
 
 @Component({
   selector: 'app-icon',
@@ -20,7 +20,7 @@ import { createElement, type IconNode } from 'lucide';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppIcon {
-  readonly icon = input.required<IconNode>();
+  readonly icon = input.required<any>();
   private readonly container = viewChild.required<ElementRef<HTMLSpanElement>>('container');
 
   constructor() {
