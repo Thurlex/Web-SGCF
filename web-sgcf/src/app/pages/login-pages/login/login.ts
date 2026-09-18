@@ -1,11 +1,13 @@
 import { Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../service/auth.service';
+import { FormsModule,  } from '@angular/forms';
+import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
+import { AuthService } from '../../../service/auth.service';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  imports: [FormsModule,MdbFormsModule ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -29,10 +31,14 @@ export class Login {
     this.authService.authenticate(request).subscribe({
 
       next: (response) => {
+        console.log(this.email)
+        console.log(this.password)
+        console.log(response);
         if (!response) {
           this.message.set('Usuário ou senha incorretos.');
           return;
         }
+        localStorage.setItem('user', `${this.email }`);
         this.message.set('Bem-vindo.');
         this.router.navigate(['/dashboard']);
       },

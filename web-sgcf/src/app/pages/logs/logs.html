@@ -1,0 +1,87 @@
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h3>Logs do sistema</h3>
+
+          @if (semPermissao) {
+            <div class="alert alert-danger">
+              Apenas o gerente pode ver os logs do sistema.
+            </div>
+          } @else {
+
+            <div class="mb-3">
+              <button type="button" class="btn btn-primary me-1" (click)="filtrar('')">Todos</button>
+              <button type="button" class="btn btn-danger me-1" (click)="filtrar('ERROR')">Erros</button>
+              <button type="button" class="btn btn-warning me-1" (click)="filtrar('WARN')">Avisos</button>
+              <button type="button" class="btn btn-secondary me-1" (click)="listar()">Atualizar</button>
+              <button type="button" class="btn btn-outline-danger" (click)="limpar()">Limpar</button>
+            </div>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Nível</th>
+                  <th scope="col">Data</th>
+                  <th scope="col">Origem</th>
+                  <th scope="col">Mensagem</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (log of lista; track log.id) {
+                  <tr>
+                    <td>
+                      @if (log.level == 'ERROR') {
+                        <span class="badge bg-danger">{{log.level}}</span>
+                      } @else {
+                        <span class="badge bg-warning">{{log.level}}</span>
+                      }
+                    </td>
+                    <td>{{log.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                    <td>{{log.loggerName}}</td>
+                    <td>{{log.message}}</td>
+                    <td>
+                      <button type="button" class="btn btn-info btn-sm" (click)="detalhes(log)">Detalhes</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+
+            @if (lista.length == 0) {
+              <div class="alert alert-info">Nenhum log registrado.</div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (logSelecionado != null) {
+  <div class="modal-backdrop fade show"></div>
+
+  <div class="modal d-block" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detalhes do log</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="fechar()"></button>
+        </div>
+        <div class="modal-body">
+          <p><b>Nivel:</b> {{logSelecionado.level}}</p>
+          <p><b>Data:</b> {{logSelecionado.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</p>
+          <p><b>Origem:</b> {{logSelecionado.loggerName}}</p>
+          <p><b>Mensagem:</b> {{logSelecionado.message}}</p>
+          <p><b>Excecao:</b> {{logSelecionado.exceptionType}}</p>
+          <pre class="bg-light p-3">{{logSelecionado.stackTrace}}</pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="fechar()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

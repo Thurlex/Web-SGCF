@@ -90,10 +90,10 @@ export class Dashboard {
 
     forkJoin({
       customers: this.loadCollection<Customer>('/customer/findAll/active'),
-      employees: this.loadCollection<Employee>('/Employee/findAll/active'),
-      tours: this.loadCollection<Tour>('/Tour/findAll/active'),
-      reservations: this.loadCollection<Reservation>('/Reservation/findAll'),
-      quotas: this.loadCollection<Quota>('/Quota/findAll'),
+      employees: this.loadCollection<Employee>('/employee/findAll/active'),
+      tours: this.loadCollection<Tour>('/tour/findAll/active'),
+      reservations: this.loadCollection<Reservation>('/reservation/findAll'),
+      quotas: this.loadCollection<Quota>('/quota/findAll'),
     })
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe((data) => this.data.set(data));

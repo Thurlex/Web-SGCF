@@ -15,10 +15,6 @@
     </div>
   </header>
 
-  @if (feedback()) {
-    <div class="alert alert-success" role="status">{{ feedback() }}</div>
-  }
-
   @if (hasError()) {
     <div class="alert alert-warning" role="alert">
       Não foi possível concluir a comunicação com o servidor.
@@ -95,73 +91,73 @@
     </div>
   </section>
 
-  @if (showForm()) {
-    <section class="card shadow-0 border mt-4" aria-labelledby="form-title">
-      <div class="card-body">
-        <div class="d-flex align-items-start justify-content-between gap-2 mb-4">
-          <div>
-            <p class="eyebrow">{{ editingId() === null ? 'Novo cadastro' : 'Atualização' }}</p>
-            <h2 id="form-title" class="h5 mb-0">
-              {{ editingId() === null ? 'Cadastrar tour' : 'Editar tour' }}
-            </h2>
-          </div>
-          <button type="button" class="btn-close"
-            aria-label="Fechar formulário"  (click)="closeForm()"
-          ></button>
+</main>
+
+<ng-template #modalTour>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ editingId() === null ? 'Cadastrar tour' : 'Editar tour' }}</h5>
+    <button type="button" class="btn-close" aria-label="Fechar" (click)="closeForm()"></button>
+  </div>
+
+  <div class="modal-body">
+    @if (formError()) {
+      <div class="alert alert-warning" role="alert">{{ formError() }}</div>
+    }
+
+    <form (ngSubmit)="saveTour()" #tourForm="ngForm">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <mdb-form-control>
+            <input mdbInput id="nameOfTour" type="text" class="form-control" name="nameOfTour"
+              [(ngModel)]="form.nameOfTour" required maxlength="120" />
+            <label mdbLabel class="form-label" for="nameOfTour">Nome do tour</label>
+          </mdb-form-control>
         </div>
 
-        @if (formError()) {
-          <div class="alert alert-warning" role="alert">{{ formError() }}</div>
-        }
+        <div class="col-md-6">
+          <label class="form-label" for="countryTour">País</label>
+          <select id="countryTour" class="form-select" name="countryTour"
+            [(ngModel)]="form.countryTour" required>
+            <option value="">Selecione</option>
+            @for (country of countries; track country) {
+              <option [value]="country">{{ country }}</option>
+            }
+          </select>
+        </div>
 
-        <form (ngSubmit)="saveTour()" #tourForm="ngForm">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label" for="nameOfTour">Nome do tour</label>
-              <input  id="nameOfTour"  type="text" class="form-control" name="nameOfTour"
-                [(ngModel)]="form.nameOfTour"required  maxlength="120"/>
-            </div>
+        <div class="col-md-6">
+          <mdb-form-control>
+            <input mdbInput id="price" type="number" class="form-control" name="price"
+              [(ngModel)]="form.price" min="0" step="0.01" required />
+            <label mdbLabel class="form-label" for="price">Preço</label>
+          </mdb-form-control>
+        </div>
 
-            <div class="col-md-6">
-              <label class="form-label" for="countryTour">País</label>
-              <select id="countryTour" class="form-select" name="countryTour"
-                [(ngModel)]="form.countryTour" required >
-                <option value="">Selecione</option>
-                @for (country of countries; track country) {
-                  <option [value]="country">{{ country }}</option>
-                }
-              </select>
-            </div>
+        <div class="col-md-6">
+          <mdb-form-control>
+            <input mdbInput id="kmOftour" type="number" class="form-control" name="kmOftour"
+              [(ngModel)]="form.kmOftour" min="0" step="1" required />
+            <label mdbLabel class="form-label" for="kmOftour">Distância em km</label>
+          </mdb-form-control>
+        </div>
 
-            <div class="col-md-6">
-              <label class="form-label" for="price">Preço</label>
-              <input id="price" type="number" class="form-control" name="price" [(ngModel)]="form.price" min="0" step="0.01" required  />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label" for="kmOftour">Distância em km</label>
-              <input id="kmOftour" type="number" class="form-control" name="kmOftour" 
-             [(ngModel)]="form.kmOftour" min="0" step="1" required />
-            </div>
-
-            <div class="col-12">
-              <label class="form-label" for="locations">Locais visitados</label>
-              <textarea id="locations" class="form-control" name="locations"
-                [(ngModel)]="form.locations" required maxlength="500" rows="3"
-              ></textarea>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
-            <button type="button" class="btn btn-outline-primary" [disabled]="saving()" (click)="closeForm()">
-              Cancelar
-            </button>
-            <button type="submit" class="btn btn-primary" [disabled]="saving() || tourForm.invalid">
-              {{ saving() ? 'Salvando...' : 'Salvar tour' }}
-            </button>
-          </div>
-        </form>
+        <div class="col-12">
+          <mdb-form-control>
+            <textarea mdbInput id="locations" class="form-control" name="locations"
+              [(ngModel)]="form.locations" required maxlength="500" rows="3"></textarea>
+            <label mdbLabel class="form-label" for="locations">Locais visitados</label>
+          </mdb-form-control>
+        </div>
       </div>
-    </section>
-  }
-</main>
+
+      <div class="modal-footer px-0 pb-0">
+        <button type="button" class="btn btn-outline-primary" [disabled]="saving()" (click)="closeForm()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving() || tourForm.invalid">
+          {{ saving() ? 'Salvando...' : 'Salvar tour' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

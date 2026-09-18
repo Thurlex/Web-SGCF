@@ -1,0 +1,32 @@
+:host {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: 1.5rem;
+  background: var(--color-background);
+}
+
+.container {
+  width: min(100%, 28rem);
+}
+
+.card {
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: 0 1rem 2.5rem rgb(32 52 59 / 10%);
+}
+h2 {
+  margin-top: 0.75rem;
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+
+@media (max-width: 30rem) {
+  :host {
+    padding: 1rem;
+  }
+}

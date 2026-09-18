@@ -1,0 +1,52 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1>SGCF</h1>
+    <h2>Login</h2>
+    <br>
+
+
+        @if (message()) {
+      <div class="message">
+        {{ message() }}
+      </div>
+    }
+    <br>
+    <form>
+      <br>
+      <mdb-form-control class="mb-4">
+        <input
+        mdbInput type="email"
+          id="form1Example1"
+          class="form-control"
+          placeholder="Digite seu email"
+          [(ngModel)]="email"
+          name="email"/>
+        <label mdbLabel class="form-label" for="form1Example1">Email</label>
+      </mdb-form-control>
+
+      <!-- Password input -->
+      <mdb-form-control class="mb-4">
+        <input mdbInput type="password"
+        id="form1Example2"
+        class="form-control"
+        placeholder="Digite sua senha"
+        [(ngModel)]="password"
+          name="password"
+        />
+        <label mdbLabel class="form-label" for="form1Example2">Senha</label>
+      </mdb-form-control>
+
+      <!-- 2 column grid layout for inline styling -->
+      <div class="row mb-4">
+        <div class="col">
+          <!-- Simple link -->
+          <a href="reset-password">Esqueceu sua senha?</a>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <button mdbRipple type="button" class="btn btn-primary btn-block" (click)="login()">Entrar</button>
+    </form>
+  </div>
+
+</div>

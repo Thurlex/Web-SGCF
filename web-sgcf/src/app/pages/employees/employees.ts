@@ -28,7 +28,7 @@ interface DeactivationForm {
 })
 export class Employees {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/Employee';
+  private readonly apiUrl = '/api/employee';
 
   protected readonly employees = signal<Employee[]>([]);
   protected readonly loading = signal(true);

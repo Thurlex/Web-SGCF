@@ -20,7 +20,7 @@
         type="button"
         [attr.aria-label]="sidebarCollapsed() ? 'Expandir menu' : 'Recolher menu'"
         [title]="sidebarCollapsed() ? 'Expandir menu' : 'Recolher menu'"
-        (click)="sidebarCollapsed.update((collapsed) => !collapsed)"
+        (click)="toggleSidebarCollapsed()"
       >
         <app-icon
           [icon]="sidebarCollapsed() ? icons.PanelLeftOpen : icons.PanelLeftClose"
@@ -59,6 +59,14 @@
         <app-icon [icon]="icons.Target" />
         <span>Metas</span>
       </a>
+
+      <!-- apenas gerente -->
+      @if (isManager()) {
+        <a routerLink="/logs" routerLinkActive="active" (click)="closeMobileSidebar()">
+          <app-icon [icon]="icons.ScrollText" />
+          <span>Logs</span>
+        </a>
+      }
 
     </nav>
 

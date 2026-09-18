@@ -15,89 +15,6 @@
     </button>
   </header>
 
-  @if (showForm()) {
-    <div class="form-card">
-
-      <h2>Adicionar Cliente</h2>
-
-      <input
-      type="text"
-      placeholder="Nome"
-      [value]="name()"
-      (input)="name.set($any($event.target).value)"
-    />
-
-      <input
-      type="email"
-      placeholder="Email"
-      [value]="email()"
-      (input)="email.set($any($event.target).value)"
-    />
-
-      <input
-      type="text"
-      placeholder="CPF"
-      [value]="cpf()"
-      (input)="cpf.set($any($event.target).value)"
-    />
-
-      <input
-      type="text"
-      placeholder="CNPJ"
-      [value]="cnpj()"
-      (input)="cnpj.set($any($event.target).value)"
-    />
-
-      <select
-      [value]="countryCustomer()"
-      (change)="countryCustomer.set($any($event.target).value)"
-    >
-      <option value="Brazil">Brazil</option>
-      <option value="Paraguay">Paraguay</option>
-      <option value="United_states">United States</option>
-      <option value="Europe">Europe</option>
-    </select>
-
-    <div>
-      <label>
-        <input
-          type="checkbox"
-          [checked]="languageSpeak().includes('Portuguese')"
-          (change)="toggleLanguage('Portuguese')"
-        />
-        Português
-      </label>
-
-      <label>
-        <input
-          type="checkbox"
-          [checked]="languageSpeak().includes('English')"
-          (change)="toggleLanguage('English')"
-        />
-        Inglês
-      </label>
-
-      <label>
-        <input
-          type="checkbox"
-          [checked]="languageSpeak().includes('Spanish')"
-          (change)="toggleLanguage('Spanish')"
-        />
-        Espanhol
-      </label>
-    </div>
-
-    <button type="button" (click)="cancelForm()">
-      Cancelar
-    </button>
-
-    <button type="button" (click)="addCustomer()">
-      Salvar Cliente
-    </button>
-
-  </div>
-}
-
   @if (hasError()) {
     <div class="alert">
       Não foi possível carregar os clientes.
@@ -151,3 +68,84 @@
     }
   </div>
 </section>
+
+<ng-template #modalCustomer>
+  <div class="modal-header">
+    <h5 class="modal-title">Adicionar Cliente</h5>
+    <button type="button" class="btn-close" aria-label="Fechar" (click)="cancelForm()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <mdb-form-control>
+          <input mdbInput id="name" type="text" class="form-control"
+            [ngModel]="name()" (ngModelChange)="name.set($event)" name="name" />
+          <label mdbLabel class="form-label" for="name">Nome</label>
+        </mdb-form-control>
+      </div>
+
+      <div class="col-md-6">
+        <mdb-form-control>
+          <input mdbInput id="email" type="email" class="form-control"
+            [ngModel]="email()" (ngModelChange)="email.set($event)" name="email" />
+          <label mdbLabel class="form-label" for="email">Email</label>
+        </mdb-form-control>
+      </div>
+
+      <div class="col-md-6">
+        <mdb-form-control>
+          <input mdbInput id="cpf" type="text" class="form-control"
+            [ngModel]="cpf()" (ngModelChange)="cpf.set($event)" name="cpf" />
+          <label mdbLabel class="form-label" for="cpf">CPF</label>
+        </mdb-form-control>
+      </div>
+
+      <div class="col-md-6">
+        <mdb-form-control>
+          <input mdbInput id="cnpj" type="text" class="form-control"
+            [ngModel]="cnpj()" (ngModelChange)="cnpj.set($event)" name="cnpj" />
+          <label mdbLabel class="form-label" for="cnpj">CNPJ</label>
+        </mdb-form-control>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label" for="countryCustomer">Origem</label>
+        <select id="countryCustomer" class="form-select" name="countryCustomer"
+          [ngModel]="countryCustomer()" (ngModelChange)="countryCustomer.set($event)">
+          <option value="Brazil">Brazil</option>
+          <option value="Paraguay">Paraguay</option>
+          <option value="United_states">United States</option>
+          <option value="Europe">Europe</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label d-block">Idiomas</label>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="pt"
+            [checked]="languageSpeak().includes('Portuguese')" (change)="toggleLanguage('Portuguese')" />
+          <label class="form-check-label" for="pt">Português</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="en"
+            [checked]="languageSpeak().includes('English')" (change)="toggleLanguage('English')" />
+          <label class="form-check-label" for="en">Inglês</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="es"
+            [checked]="languageSpeak().includes('Spanish')" (change)="toggleLanguage('Spanish')" />
+          <label class="form-check-label" for="es">Espanhol</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="cancelForm()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="addCustomer()">Salvar Cliente</button>
+  </div>
+</ng-template>

@@ -1,4 +1,4 @@
-import { HttpErrorResponse, HttpInterceptorFn, HttpResponse } from '@angular/common/http';
+/*import { HttpErrorResponse, HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
@@ -487,4 +487,4 @@ function ok(body: unknown): Observable<HttpResponse<unknown>> {
 
 function fail(status: number, message: string): Observable<never> {
   return throwError(() => new HttpErrorResponse({ status, error: message }));
-}
+}*/
