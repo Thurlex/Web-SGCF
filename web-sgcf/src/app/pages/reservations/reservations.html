@@ -54,7 +54,15 @@
               <td>{{ reservation.employee?.name ?? 'Não encontrado' }}</td>
               <td>{{ reservation.date }}</td>
               <td>{{ reservation.value | currency:'BRL' }}</td>
-              <td>{{ translateStatus(reservation.status) }}</td>
+              <td>
+                <select class="status-select" [value]="reservation.status"
+                  [disabled]="updatingStatus() === reservation.id"
+                  (change)="updateStatus(reservation, $any($event.target).value)">
+                  <option value="Pending">Pendente</option>
+                  <option value="Confirmed">Confirmada</option>
+                  <option value="Cancelled">Cancelada</option>
+                </select>
+              </td>
               <td>
                 <button type="button" class="delete-button" (click)="removeReservation(reservation.id)">
                   Excluir
@@ -75,6 +83,10 @@
   </div>
 
   <div class="modal-body">
+    @if (formError()) {
+      <div class="form-error" role="alert">{{ formError() }}</div>
+    }
+
     <div class="row g-4">
       <div class="col-md-6">
         <label class="form-label" for="tours">Passeio</label>
@@ -129,7 +141,9 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="cancelForm()">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="addReservation()">Salvar Reserva</button>
+    <button type="button" class="btn btn-outline-primary" [disabled]="saving()" (click)="cancelForm()">Cancelar</button>
+    <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="addReservation()">
+      {{ saving() ? 'Salvando...' : 'Salvar Reserva' }}
+    </button>
   </div>
 </ng-template>

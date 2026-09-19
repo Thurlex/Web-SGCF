@@ -42,6 +42,8 @@ interface ReservationRequest {
   status: string;
 }
 
+type ReservationStatus = 'Pending' | 'Confirmed' | 'Cancelled';
+
 @Component({
   selector: 'app-reservations',
   templateUrl: './reservations.html',
@@ -73,6 +75,9 @@ export class Reservations {
   protected readonly employeeId = signal<number | null>(null);
   protected readonly value = signal(0);
   protected readonly status = signal('Pending');
+  protected readonly saving = signal(false);
+  protected readonly updatingStatus = signal<number | null>(null);
+  protected readonly formError = signal('');
 
   constructor() {
     this.loadTours();
@@ -118,6 +123,7 @@ export class Reservations {
 
   protected openForm(): void {
     this.clearForm();
+    this.formError.set('');
     this.showForm.set(true);
     this.modalRef = this.modalService.open(this.modalReservation);
   }
@@ -224,7 +230,8 @@ export class Reservations {
       status: this.status()
     };
 
-    console.log('Enviando reserva:', reservation);
+    this.saving.set(true);
+    this.formError.set('');
 
     this.http
       .post(`${this.apiUrl}/save`, reservation, {
@@ -239,12 +246,33 @@ export class Reservations {
           this.loadReservations();
         },
         error: error => {
-          console.error('Erro ao adicionar reserva:', error);
-          console.error('Status:', error.status);
-          console.error('Resposta:', error.error);
-          alert('Não foi possível cadastrar a reserva.');
-        }
+          this.formError.set('Não foi possível cadastrar a reserva. Verifique os dados informados.');
+          this.saving.set(false);
+        },
+        complete: () => this.saving.set(false),
       });
+  }
+
+  protected updateStatus(reservation: Reservation, nextStatus: string): void {
+    const status = nextStatus as ReservationStatus;
+
+    if (status === reservation.status) {
+      return;
+    }
+
+    this.updatingStatus.set(reservation.id);
+    this.http.patch<Reservation>(`${this.apiUrl}/updateStatus/${reservation.id}`, { status }).subscribe({
+      next: (updatedReservation) => {
+        this.reservations.update((reservations) => reservations.map((item) =>
+          item.id === updatedReservation.id ? updatedReservation : item,
+        ));
+      },
+      error: () => {
+        this.loadReservations();
+        this.updatingStatus.set(null);
+      },
+      complete: () => this.updatingStatus.set(null),
+    });
   }
 
   protected removeReservation(id: number): void {
