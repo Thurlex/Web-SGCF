@@ -1,8 +1,9 @@
-// mudar aqui: criar um service em service/<nome>.service.ts e um model em models/<nome>.ts
-// e trocar as chamadas this.http por esse service (exemplo pronto em tours.ts e customers.ts)
 import { HttpClient } from '@angular/common/http';
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, TemplateRef, ViewChild, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
+import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
@@ -46,11 +47,16 @@ interface ReservationRequest {
   templateUrl: './reservations.html',
   styleUrl: './reservations.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CurrencyPipe]
+  imports: [CurrencyPipe, FormsModule, MdbFormsModule, MdbModalModule]
 })
 export class Reservations {
   private readonly http = inject(HttpClient);
+  private readonly modalService = inject(MdbModalService);
   private readonly apiUrl = '/api/reservation';
+
+  @ViewChild('modalReservation') modalReservation!: TemplateRef<any>;
+
+  modalRef!: MdbModalRef<any>;
 
   protected readonly loading = signal(true);
   protected readonly hasError = signal(false);
@@ -111,12 +117,18 @@ export class Reservations {
   }
 
   protected openForm(): void {
+    this.clearForm();
     this.showForm.set(true);
+    this.modalRef = this.modalService.open(this.modalReservation);
   }
 
   protected cancelForm(): void {
     this.showForm.set(false);
     this.clearForm();
+
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 
   private loadTours(): void {
@@ -223,6 +235,7 @@ export class Reservations {
           console.log('Reserva criada:', response);
           this.showForm.set(false);
           this.clearForm();
+          this.modalRef.close();
           this.loadReservations();
         },
         error: error => {

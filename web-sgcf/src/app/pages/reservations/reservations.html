@@ -10,6 +10,7 @@
       <button type="button" class="refresh-button" (click)="loadReservations()" [disabled]="loading()">
         {{ loading() ? 'Atualizando...' : 'Atualizar' }}
       </button>
+
       <button type="button" class="add-button" (click)="openForm()">
         Adicionar Reserva
       </button>
@@ -22,141 +23,113 @@
     </div>
   }
 
-  @if (showForm()) {
-
-    <div class="form-card">
-      <div class="form-header">
-        <div>
-          <p class="eyebrow">NOVA RESERVA</p>
-          <h2>Adicionar Reserva</h2>
-        </div>
-        <button type="button" class="close-button" (click)="cancelForm()">
-          ×
-        </button>
-      </div>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="tours">Passeio</label>
-          <select
-            id="tours"
-            [value]="tourId() ?? ''"
-            (change)="selectTour($any($event.target).value)">
-            <option value="">
-              Selecione um passeio
-            </option>
-
-            @for (tour of tours(); track tour.id) {
-              <option [value]="tour.id">
-                {{ tour.nameOfTour }}
-              </option>
-            }
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="customerId">Cliente</label>
-          <select
-            id="customerId"
-            [value]="customerId() ?? ''"
-            (change)="customerId.set(+$any($event.target).value || null)">
-            <option value="">
-              Selecione um cliente
-            </option>
-
-            @for (customer of customers(); track customer.id) {
-              <option [value]="customer.id">
-                {{ customer.name }}
-              </option>
-            }
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="employeeId">Funcionário</label>
-          <select
-            id="employeeId"
-            [value]="employeeId() ?? ''"
-            (change)="employeeId.set(+$any($event.target).value || null)">
-            <option value="">
-              Selecione um funcionário
-            </option>
-            @for (employee of employees(); track employee.id) {
-              <option [value]="employee.id">
-                {{ employee.name }}
-              </option>
-            }
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="date">Data</label>
-          <input
-            id="date"
-            type="date"
-            [value]="date()"
-            (change)="date.set($any($event.target).value)"
-          />
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button type="button" class="cancel-button" (click)="cancelForm()">
-          Cancelar
-        </button>
-        <button type="button" class="save-button" (click)="addReservation()">
-          Salvar Reserva
-        </button>
-      </div>
-    </div>
-  }
-
   <div class="table-card">
-  @if (loading()) {
-    <div class="loading">
-      Carregando reservas...
-    </div>
-  }
-  @else if (reservations().length === 0) {
-    <div class="empty">
-      Nenhuma reserva encontrada.
-    </div>
-  }
-  @else {
-    <table>
-      <thead>
-        <tr>
-          <th>Passeio</th>
-          <th>Cliente</th>
-          <th>Funcionário</th>
-          <th>Data</th>
-          <th>Valor</th>
-          <th>Status</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
+    @if (loading()) {
+      <div class="loading">
+        Carregando reservas...
+      </div>
+    } @else if (reservations().length === 0) {
+      <div class="empty">
+        Nenhuma reserva encontrada.
+      </div>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>Passeio</th>
+            <th>Cliente</th>
+            <th>Funcionário</th>
+            <th>Data</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        @for (reservation of reservations(); track reservation.id) {
-  <tr>
-    <td>{{ reservation.tour?.nameOfTour ?? 'Não encontrado' }}</td>
-<td>{{ reservation.customer?.name ?? 'Não encontrado' }}</td>
-<td>{{ reservation.employee?.name ?? 'Não encontrado' }}</td>
-<td>{{ reservation.date }}</td>
-<td>{{ reservation.value | currency:'BRL' }}</td>
-<td>{{ translateStatus(reservation.status) }}</td>
-    <td>
-      <button
-        type="button"
-        class="delete-button"
-        (click)="removeReservation(reservation.id)">
-        Excluir
-      </button>
-    </td>
-  </tr>
-}
-      </tbody>
-    </table>
-  }
-</div>
+        <tbody>
+          @for (reservation of reservations(); track reservation.id) {
+            <tr>
+              <td>{{ reservation.tour?.nameOfTour ?? 'Não encontrado' }}</td>
+              <td>{{ reservation.customer?.name ?? 'Não encontrado' }}</td>
+              <td>{{ reservation.employee?.name ?? 'Não encontrado' }}</td>
+              <td>{{ reservation.date }}</td>
+              <td>{{ reservation.value | currency:'BRL' }}</td>
+              <td>{{ translateStatus(reservation.status) }}</td>
+              <td>
+                <button type="button" class="delete-button" (click)="removeReservation(reservation.id)">
+                  Excluir
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
 </section>
+
+<ng-template #modalReservation>
+  <div class="modal-header">
+    <h5 class="modal-title">Adicionar Reserva</h5>
+    <button type="button" class="btn-close" aria-label="Fechar" (click)="cancelForm()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <label class="form-label" for="tours">Passeio</label>
+        <select id="tours" class="form-select" name="tours"
+          [value]="tourId() ?? ''" (change)="selectTour($any($event.target).value)">
+          <option value="">Selecione um passeio</option>
+
+          @for (tour of tours(); track tour.id) {
+            <option [value]="tour.id">
+              {{ tour.nameOfTour }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label" for="customerId">Cliente</label>
+        <select id="customerId" class="form-select" name="customerId"
+          [value]="customerId() ?? ''" (change)="customerId.set(+$any($event.target).value || null)">
+          <option value="">Selecione um cliente</option>
+
+          @for (customer of customers(); track customer.id) {
+            <option [value]="customer.id">
+              {{ customer.name }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label" for="employeeId">Funcionário</label>
+        <select id="employeeId" class="form-select" name="employeeId"
+          [value]="employeeId() ?? ''" (change)="employeeId.set(+$any($event.target).value || null)">
+          <option value="">Selecione um funcionário</option>
+
+          @for (employee of employees(); track employee.id) {
+            <option [value]="employee.id">
+              {{ employee.name }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <mdb-form-control>
+          <input mdbInput id="date" type="date" class="form-control"
+            [ngModel]="date()" (ngModelChange)="date.set($event)" name="date" />
+          <label mdbLabel class="form-label" for="date">Data</label>
+        </mdb-form-control>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="cancelForm()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="addReservation()">Salvar Reserva</button>
+  </div>
+</ng-template>
