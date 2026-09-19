@@ -87,7 +87,7 @@
         </div>
 
         <div class="form-group">
-        <label for="permission">Permissão</label>
+          <label for="permission">Permissão</label>
           <select
             id="permission"
             [value]="permission()"
@@ -100,18 +100,39 @@
             </option>
           </select>
         </div>
+
+        @if (permission() === 'Employee') {
+          <div class="form-group">
+            <label for="employeeId">Funcionário</label>
+            <select
+              id="employeeId"
+              [value]="employeeId() ?? ''"
+              (change)="setEmployeeId($any($event.target).value)"
+              required>
+              <option value="">Selecione o funcionário</option>
+              @for (employee of availableEmployees(); track employee.id) {
+                <option [value]="employee.id">{{ employee.name }}</option>
+              }
+            </select>
+          </div>
+        }
       </div>
+
+      @if (formError()) {
+        <div class="form-error" role="alert">{{ formError() }}</div>
+      }
 
       <div class="form-actions">
         <button
           type="button"
           class="cancel-button"
+          [disabled]="saving()"
           (click)="cancelForm()">
           Cancelar
         </button>
 
-        <button type="button" class="save-button" (click)="addUser()">
-          Salvar Usuário
+        <button type="button" class="save-button" [disabled]="saving()" (click)="addUser()">
+          {{ saving() ? 'Salvando...' : 'Salvar Usuário' }}
         </button>
       </div>
     </div>
@@ -137,6 +158,7 @@
             <th>Usuário</th>
             <th>Permissão</th>
             <th>Email</th>
+            <th>Funcionário</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -155,6 +177,9 @@
               </td>
               <td>
                 {{ user.email }}
+              </td>
+              <td>
+                {{ employeeName(user.employeeId) }}
               </td>
               <td>
                 <button type="button" class="delete-button" (click)="removeUser(user.id)">
