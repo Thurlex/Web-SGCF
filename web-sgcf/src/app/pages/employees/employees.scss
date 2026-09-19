@@ -101,6 +101,15 @@ h2 {
   border-radius: 6px;
 }
 
+.form-error {
+  margin: 0 1.5rem 1rem;
+  padding: 0.75rem 1rem;
+  color: #8a2f2a;
+  background: #fff0ef;
+  border: 1px solid #e5b5b1;
+  border-radius: 4px;
+}
+
 .table-card {
   padding: 1.35rem;
   background: var(--color-surface);

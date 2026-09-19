@@ -21,6 +21,13 @@ interface DeactivationForm {
   password: string;
 }
 
+interface EmployeeRequest {
+  name: string;
+  cpf: string;
+  dayOfBirth: string | null;
+  languagesSpoken: string[];
+}
+
 @Component({
   selector: 'app-employees',
   imports: [CurrencyPipe, FormsModule, MdbFormsModule, MdbModalModule],
@@ -45,6 +52,8 @@ export class Employees {
   protected readonly employeeToDeactivate = signal<Employee | null>(null);
   protected readonly deactivating = signal(false);
   protected readonly formError = signal('');
+  protected readonly saving = signal(false);
+  protected readonly saveError = signal('');
 
   protected readonly name = signal('');
   protected readonly cpf = signal('');
@@ -80,8 +89,36 @@ export class Employees {
     this.cpf.set('');
     this.dayOfBirth.set('');
     this.languagesSpoken.set([]);
+    this.saveError.set('');
 
     this.modalRef = this.modalService.open(this.modalEmployee);
+  }
+
+  protected setCpf(value: string): void {
+    this.cpf.set(value.replace(/\D/g, '').slice(0, 11));
+  }
+
+  protected isFormValid(): boolean {
+    return Boolean(this.name().trim()) && this.isCpfValid(this.cpf());
+  }
+
+  private isCpfValid(cpf: string): boolean {
+    if (!/^\d{11}$/.test(cpf) || /^([0-9])\1{10}$/.test(cpf)) {
+      return false;
+    }
+
+    const digits = cpf.split('').map(Number);
+    const firstCheckDigit = this.calculateCpfCheckDigit(digits.slice(0, 9));
+    const secondCheckDigit = this.calculateCpfCheckDigit(digits.slice(0, 10));
+
+    return digits[9] === firstCheckDigit && digits[10] === secondCheckDigit;
+  }
+
+  private calculateCpfCheckDigit(digits: number[]): number {
+    const weightStart = digits.length + 1;
+    const sum = digits.reduce((total, digit, index) => total + digit * (weightStart - index), 0);
+    const remainder = (sum * 10) % 11;
+    return remainder === 10 ? 0 : remainder;
   }
 
   protected toggleLanguage(language: string): void {
@@ -97,28 +134,45 @@ export class Employees {
   }
 
   protected cancelForm(): void {
-    this.modalRef.close();
+    if (!this.saving()) {
+      this.modalRef.close();
+    }
   }
 
   protected addEmployee(): void {
-    const employee = {
-      name: this.name(),
+    if (!this.isFormValid()) {
+      this.saveError.set('Informe o nome e um CPF válido com 11 dígitos.');
+      return;
+    }
+
+    const employee: EmployeeRequest = {
+      name: this.name().trim(),
       cpf: this.cpf(),
-      dayOfBirth: this.dayOfBirth(),
+      dayOfBirth: this.dayOfBirth() || null,
       languagesSpoken: this.languagesSpoken()
     };
+
+    this.saving.set(true);
+    this.saveError.set('');
 
     this.http
       .post(`${this.apiUrl}/save`, employee, {
         responseType: 'text'
       })
-      .subscribe({
-        next: () => {
+      .pipe(
+        catchError((error) => {
+          this.saveError.set(error.status === 400
+            ? 'Verifique o nome e o CPF informado.'
+            : 'Não foi possível cadastrar o funcionário.');
+          return of(null);
+        }),
+        finalize(() => this.saving.set(false)),
+      )
+      .subscribe((response) => {
+        if (response !== null) {
           this.modalRef.close();
+          this.feedback.set('Funcionário cadastrado com sucesso.');
           this.loadEmployees();
-        },
-        error: () => {
-          alert('Não foi possível cadastrar o funcionário.');
         }
       });
   }

@@ -92,15 +92,15 @@
       <div class="col-md-6">
         <mdb-form-control>
           <input mdbInput id="employeeName" type="text" class="form-control"
-            [ngModel]="name()" (ngModelChange)="name.set($event)" name="name" />
+            [ngModel]="name()" (ngModelChange)="name.set($event)" name="name" required />
           <label mdbLabel class="form-label" for="employeeName">Nome</label>
         </mdb-form-control>
       </div>
 
       <div class="col-md-6">
         <mdb-form-control>
-          <input mdbInput id="employeeCpf" type="text" class="form-control"
-            [ngModel]="cpf()" (ngModelChange)="cpf.set($event)" name="cpf" />
+          <input mdbInput id="employeeCpf" type="text" class="form-control" inputmode="numeric"
+            maxlength="11" [ngModel]="cpf()" (ngModelChange)="setCpf($event)" name="cpf" required />
           <label mdbLabel class="form-label" for="employeeCpf">CPF</label>
         </mdb-form-control>
       </div>
@@ -137,8 +137,14 @@
     </div>
   </div>
 
+  @if (saveError()) {
+    <div class="form-error" role="alert">{{ saveError() }}</div>
+  }
+
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="cancelForm()">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="addEmployee()">Salvar Funcionário</button>
+    <button type="button" class="btn btn-outline-primary" [disabled]="saving()" (click)="cancelForm()">Cancelar</button>
+    <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="addEmployee()">
+      {{ saving() ? 'Salvando...' : 'Salvar Funcionário' }}
+    </button>
   </div>
 </ng-template>
