@@ -12,7 +12,27 @@ This project uses Angular 22 and the standalone application API.
 Create these directories when the first matching implementation is added. Keeping the initial
 workspace small avoids empty folders and premature abstractions.
 
-## Development server
+## Run the full stack
+
+Run the services in this order from separate terminals:
+
+1. Start PostgreSQL from the repository root:
+
+```powershell
+cd ..
+cd SGCF_back
+docker compose up -d
+```
+
+2. Start the Spring Boot API from `SGCF_back`:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+The API uses `localhost:5434` for PostgreSQL and listens on `localhost:8082`.
+
+3. Start Angular from the frontend directory:
 
 To start a local development server, run:
 
