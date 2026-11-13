@@ -46,7 +46,7 @@ export class Users {
 
   protected readonly userName = signal('');
   protected readonly userPassword = signal('');
-  protected readonly permission = signal('Employee');
+  protected readonly permission = signal('EMPLOYEE');
   protected readonly email = signal('');
   protected readonly employeeId = signal<number | null>(null);
   protected setEmployeeId(value: string): void {
@@ -123,7 +123,7 @@ export class Users {
 
   protected addUser(): void {
     if (!this.userName().trim() || !this.userPassword() || !this.email().trim()
-      || (this.permission() === 'Employee' && this.employeeId() === null)) {
+      || (this.permission() === 'EMPLOYEE' && this.employeeId() === null)) {
       this.formError.set('Preencha todos os campos e selecione um funcionário para a conta.');
       return;
     }
@@ -133,7 +133,7 @@ export class Users {
       userPassword: this.userPassword(),
       permission: this.permission(),
       email: this.email().trim(),
-      employeeId: this.permission() === 'Employee' ? this.employeeId() : null,
+      employeeId: this.permission() === 'EMPLOYEE' ? this.employeeId() : null,
     };
 
     this.saving.set(true);
@@ -192,7 +192,7 @@ export class Users {
   private clearForm(): void {
     this.userName.set('');
     this.userPassword.set('');
-    this.permission.set('Employee');
+    this.permission.set('EMPLOYEE');
     this.email.set('');
     this.employeeId.set(null);
   }

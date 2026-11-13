@@ -42,7 +42,7 @@ interface ReservationRequest {
   status: string;
 }
 
-type ReservationStatus = 'Pending' | 'Confirmed' | 'Cancelled';
+type ReservationStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED';
 
 @Component({
   selector: 'app-reservations',
@@ -74,7 +74,7 @@ export class Reservations {
   protected readonly customerId = signal<number | null>(null);
   protected readonly employeeId = signal<number | null>(null);
   protected readonly value = signal(0);
-  protected readonly status = signal('Pending');
+  protected readonly status = signal('PENDING');
   protected readonly saving = signal(false);
   protected readonly updatingStatus = signal<number | null>(null);
   protected readonly formError = signal('');
@@ -303,16 +303,16 @@ export class Reservations {
     this.customerId.set(null);
     this.employeeId.set(null);
     this.value.set(0);
-    this.status.set('Pending');
+    this.status.set('PENDING');
   }
 
   protected translateStatus(status: string): string {
     switch (status) {
-      case 'Pending':
+      case 'PENDING':
         return 'Pendente';
-      case 'Confirmed':
+      case 'CONFIRMED':
         return 'Confirmada';
-      case 'Cancelled':
+      case 'CANCELLED':
         return 'Cancelada';
       default:
         return status;

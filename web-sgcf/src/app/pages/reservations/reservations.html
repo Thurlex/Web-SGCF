@@ -58,9 +58,9 @@
                 <select class="status-select" [value]="reservation.status"
                   [disabled]="updatingStatus() === reservation.id"
                   (change)="updateStatus(reservation, $any($event.target).value)">
-                  <option value="Pending">Pendente</option>
-                  <option value="Confirmed">Confirmada</option>
-                  <option value="Cancelled">Cancelada</option>
+                  <option value="PENDING">Pendente</option>
+                  <option value="CONFIRMED">Confirmada</option>
+                  <option value="CANCELLED">Cancelada</option>
                 </select>
               </td>
               <td>

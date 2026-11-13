@@ -31,7 +31,7 @@ export class Customers {
   protected readonly email = signal('');
   protected readonly cpf = signal('');
   protected readonly cnpj = signal('');
-  protected readonly countryCustomer = signal('Brazil');
+  protected readonly countryCustomer = signal('BRAZIL');
   protected readonly languageSpeak = signal<string[]>([]);
 
   constructor() {
@@ -59,7 +59,7 @@ export class Customers {
     this.email.set('');
     this.cpf.set('');
     this.cnpj.set('');
-    this.countryCustomer.set('Brazil');
+    this.countryCustomer.set('BRAZIL');
     this.languageSpeak.set([]);
 
     this.modalRef = this.modalService.open(this.modalCustomer);

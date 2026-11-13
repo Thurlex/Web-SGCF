@@ -48,7 +48,7 @@ export class Layout {
     private readonly router: Router,
   ) {
     this.authService.session().subscribe({
-      next: (user) => this.isManager.set(user.permission === 'Manager'),
+      next: (user) => this.isManager.set(user.permission === 'MANAGER'),
       error: () => this.isManager.set(false),
     });
   }

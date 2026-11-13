@@ -10,7 +10,7 @@ export interface AuthenticateRequest {
 export interface AuthenticatedUser {
   id: number;
   userName: string;
-  permission: 'Manager' | 'Employee';
+  permission: 'MANAGER' | 'EMPLOYEE';
   email: string;
   employeeId: number | null;
 }
