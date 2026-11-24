@@ -6,12 +6,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
+import { authInterceptor } from './service/auth.interceptor';
 
 registerLocaleData(localePt);
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([])),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideRouter(routes),
     provideAnimations(),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
