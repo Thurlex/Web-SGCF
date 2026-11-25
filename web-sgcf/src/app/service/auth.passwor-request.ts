@@ -38,6 +38,6 @@ export class resetPassword{
   }
 
   changePassword(request : changePasswordRequest): Observable<booleanReturn>{
-    return this.http.patch<booleanReturn>(`api/user/change`, request)
+    return this.http.patch<booleanReturn>(`/api/user/change`, request)
   }
 }

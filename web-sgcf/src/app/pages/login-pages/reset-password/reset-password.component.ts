@@ -36,9 +36,7 @@ export class ResetPasswordComponent {
   const request = { email: this.email };
 
   this.resetPasswordService.request(request).subscribe({
-    next: (responseToken) => {
-      console.log('Token generated:', responseToken);
-
+    next: () => {
       Swal.fire({
         title: 'Success!',
         text: 'Email enviado com sucesso.',
@@ -60,5 +58,4 @@ export class ResetPasswordComponent {
 }
 
 }
-
 

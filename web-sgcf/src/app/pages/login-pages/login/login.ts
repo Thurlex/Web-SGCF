@@ -31,9 +31,6 @@ export class Login {
     this.authService.authenticate(request).subscribe({
 
       next: (response) => {
-        console.log(this.email)
-        console.log(this.password)
-        console.log(response);
         if (!response) {
           this.message.set('Usuário ou senha incorretos.');
           return;

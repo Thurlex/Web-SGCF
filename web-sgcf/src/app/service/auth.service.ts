@@ -30,7 +30,6 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   authenticate(request: AuthenticateRequest): Observable<boolean> {
-    console.log(`${this.apiUrl}/authenticate`)
     return this.http.post<boolean>(
       `${this.apiUrl}/authenticate`,
       request,
