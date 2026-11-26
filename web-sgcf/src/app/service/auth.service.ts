@@ -19,10 +19,6 @@ export interface AuthenticatedUser {
   email: string;
   employeeId: number | null;
 }
-export interface AuthenticateEmail {
-  email: string;
-
-}
 
 @Injectable({
   providedIn: 'root'
@@ -42,13 +38,7 @@ export class AuthService {
   }
 
   session(): Observable<AuthenticatedUser> {
-  const emailStored = localStorage.getItem('user') ?? '';
-
-  const request: AuthenticateEmail = {
-    email: emailStored
-  };
-
-  return this.http.post<AuthenticatedUser>(`${this.apiUrl}/is-manager`, request);
+    return this.http.get<AuthenticatedUser>(`${this.apiUrl}/me`);
   }
 
   logout(): void {
