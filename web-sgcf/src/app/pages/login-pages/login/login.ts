@@ -2,12 +2,12 @@ import { Component, signal } from '@angular/core';
 import { FormsModule,  } from '@angular/forms';
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 import { AuthService } from '../../../service/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule,MdbFormsModule ],
+  imports: [FormsModule, MdbFormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

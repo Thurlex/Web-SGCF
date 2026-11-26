@@ -1,9 +1,27 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
 import { Login } from './login';
+
+it('opens password recovery through the router without a page reload', () => {
+  TestBed.configureTestingModule({ imports: [Login], providers: [provideHttpClient(), provideRouter([])] });
+  const router = TestBed.inject(Router);
+  const navigate = spyOn(router, 'navigateByUrl').and.resolveTo(true);
+  const fixture = TestBed.createComponent(Login);
+  fixture.detectChanges();
+  const link = fixture.nativeElement.querySelector('a[href$="reset-password"]') as HTMLAnchorElement;
+  const click = new MouseEvent('click', { button: 0, cancelable: true });
+
+  link.addEventListener('click', event => {
+    expect(event.defaultPrevented).toBeTrue();
+    event.preventDefault();
+  }, { once: true });
+  link.dispatchEvent(click);
+  expect(navigate.calls.count()).toBe(1);
+  expect(navigate.calls.mostRecent()?.args[0]?.toString()).toBe('/reset-password');
+});
 
 describe('Login JWT', () => {
   let login: Login;
