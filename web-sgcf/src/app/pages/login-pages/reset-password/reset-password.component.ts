@@ -43,7 +43,7 @@ export class ResetPasswordComponent {
         icon: 'success',
         draggable: true
       });
-      this.router.navigate(['/compare-tokem'])
+      this.router.navigate(['/compare-token'])
     },
     error: (error) => {
       console.error('Error requesting token:', error);

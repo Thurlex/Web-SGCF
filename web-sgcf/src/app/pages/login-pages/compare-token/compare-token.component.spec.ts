@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CompareTokemComponent } from './compare-tokem.component';
+import { CompareTokemComponent } from './compare-token.component';
 
 describe('CompareTokemComponent', () => {
   let component: CompareTokemComponent;

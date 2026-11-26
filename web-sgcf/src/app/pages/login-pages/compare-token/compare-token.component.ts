@@ -6,16 +6,16 @@ import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-compare-tokem',
+  selector: 'app-compare-token',
   imports: [MdbFormsModule, FormsModule],
-  templateUrl: './compare-tokem.component.html',
-  styleUrl: './compare-tokem.component.scss'
+  templateUrl: './compare-token.component.html',
+  styleUrl: './compare-token.component.scss'
 })
 export class CompareTokemComponent {
 
   tokenIsTrue: boolean = false ;
   email: string = "";
-  tokem: string = "";
+  token: string = "";
   newPassword: string = "";
 
   constructor(
@@ -24,16 +24,16 @@ export class CompareTokemComponent {
   ){}
 
 
-  compreTokem():void{
+  compareToken():void{
 
-    if (!this.email && !this.tokem) {
+    if (!this.email && !this.token) {
         Swal.fire({
           title: 'Warning',
           text: 'Não pode ter elementos vazio.',
           icon: 'warning'
         });
       }
-      const request = { email: this.email, token: this.tokem };
+      const request = { email: this.email, token: this.token };
 
       this.resetPasswordService.compareTokem(request).subscribe({
         next: (response) => {
