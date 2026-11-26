@@ -7,6 +7,11 @@ export interface AuthenticateRequest {
   password: string;
 }
 
+export interface AuthenticateResponse {
+  success: boolean;
+  token: string;
+}
+
 export interface AuthenticatedUser {
   id: number;
   userName: string;
@@ -29,12 +34,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  authenticate(request: AuthenticateRequest): Observable<boolean> {
-    console.log(`${this.apiUrl}/authenticate`)
-    return this.http.post<boolean>(
+  authenticate(request: AuthenticateRequest): Observable<AuthenticateResponse> {
+    return this.http.post<AuthenticateResponse>(
       `${this.apiUrl}/authenticate`,
       request,
-      { withCredentials: true }
     );
   }
 
@@ -50,5 +53,6 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('user');
+    localStorage.removeItem('access_token');
   }
 }
