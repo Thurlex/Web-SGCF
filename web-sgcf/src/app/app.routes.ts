@@ -91,6 +91,11 @@ export const routes: Routes = [
       component: Logs,
       canActivate: [managerGuard],//apenas o gerente pode acessar os logs(tem que definir isso aiinda)
       title: 'Logs do sistema | SGCF'
+    },
+
+    {
+      path: '**',
+      redirectTo: 'dashboard'
     }
   ]
 }
