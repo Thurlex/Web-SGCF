@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { AuthService, AuthenticatedUser } from '../../service/auth.service';
+import Swal from 'sweetalert2';
 
 interface User {
   id: number;
@@ -162,19 +163,37 @@ export class Users {
   }
 
   protected removeUser(id: number): void {
-    this.http
-      .delete(`${this.apiUrl}/delete/${id}`, {
-        responseType: 'text'
-      })
-      .subscribe({
-        next: () => {
-          this.users.update(users =>
-            users.filter(user => user.id !== id)
-          );
-        },
-        error: (error) => {
-          console.error('Erro ao remover usuário:', error);
+      Swal.fire({
+        title: 'Excluir usuário?',
+        text: 'Esta ação não pode ser desfeita.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Excluir',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (!result.isConfirmed) {
+          return;
         }
+
+        this.http
+          .delete(`${this.apiUrl}/delete/${id}`, {
+            responseType: 'text'
+          })
+          .subscribe({
+            next: () => {
+              this.users.update(users =>
+                users.filter(user => user.id !== id)
+              );
+              Swal.fire('Usuário excluído com sucesso.');
+            },
+            error: () => {
+              Swal.fire({
+                title: 'Erro',
+                text: 'Não foi possível excluir o usuário.',
+                icon: 'error',
+              });
+            }
+          });
       });
   }
 
