@@ -34,12 +34,9 @@ export class CompareTokemComponent {
         });
       }
       const request = { email: this.email, token: this.tokem };
-      console.log(this.email)
-      console.log(this.tokem);
 
       this.resetPasswordService.compareTokem(request).subscribe({
         next: (response) => {
-          console.log(response.bool);
           if(response.bool){
             this.tokenIsTrue = true;
             Swal.fire({
@@ -80,8 +77,6 @@ export class CompareTokemComponent {
     }
 
     const request = { email: this.email, password: this.newPassword };
-      console.log(this.email)
-      console.log(this.newPassword);
 
       this.resetPasswordService.changePassword(request).subscribe({
         next: (response) =>{

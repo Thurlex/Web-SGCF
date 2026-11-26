@@ -76,11 +76,11 @@
       routerLinkActive="active"
       (click)="closeMobileSidebar()"
     >
-      <span class="avatar">AD</span>
+      <span class="avatar">{{ userInitials() }}</span>
 
       <span class="profile-copy">
-        <strong>Minha conta</strong>
-        <small>Perfil do usuário</small>
+        <strong>{{ currentUser()?.userName ?? 'Minha conta' }}</strong>
+        <small>{{ currentUser()?.email ?? 'Perfil do usuário' }}</small>
       </span>
     </a>
 
