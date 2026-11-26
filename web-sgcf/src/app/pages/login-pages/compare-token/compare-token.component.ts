@@ -26,13 +26,14 @@ export class CompareTokemComponent {
 
   compareToken():void{
 
-    if (!this.email && !this.token) {
-        Swal.fire({
-          title: 'Warning',
-          text: 'Não pode ter elementos vazio.',
-          icon: 'warning'
-        });
-      }
+    if (!this.email.trim() || !this.token.trim()) {
+      Swal.fire({
+        title: 'Warning',
+        text: 'Não pode ter elementos vazio.',
+        icon: 'warning'
+      });
+      return;
+    }
       const request = { email: this.email, token: this.token };
 
       this.resetPasswordService.compareTokem(request).subscribe({
@@ -67,7 +68,7 @@ export class CompareTokemComponent {
   }
 
   trocarSenha():void {
-    if (!this.email && !this.newPassword) {
+    if (!this.email.trim() || !this.newPassword.trim()) {
         Swal.fire({
           title: 'Warning',
           text: 'Não pode ter elementos vazio.',
