@@ -6,16 +6,16 @@ import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-compare-tokem',
+  selector: 'app-compare-token',
   imports: [MdbFormsModule, FormsModule],
-  templateUrl: './compare-tokem.component.html',
-  styleUrl: './compare-tokem.component.scss'
+  templateUrl: './compare-token.component.html',
+  styleUrl: './compare-token.component.scss'
 })
 export class CompareTokemComponent {
 
   tokenIsTrue: boolean = false ;
   email: string = "";
-  tokem: string = "";
+  token: string = "";
   newPassword: string = "";
 
   constructor(
@@ -24,22 +24,20 @@ export class CompareTokemComponent {
   ){}
 
 
-  compreTokem():void{
+  compareToken():void{
 
-    if (!this.email && !this.tokem) {
-        Swal.fire({
-          title: 'Warning',
-          text: 'Não pode ter elementos vazio.',
-          icon: 'warning'
-        });
-      }
-      const request = { email: this.email, token: this.tokem };
-      console.log(this.email)
-      console.log(this.tokem);
+    if (!this.email.trim() || !this.token.trim()) {
+      Swal.fire({
+        title: 'Warning',
+        text: 'Não pode ter elementos vazio.',
+        icon: 'warning'
+      });
+      return;
+    }
+      const request = { email: this.email, token: this.token };
 
       this.resetPasswordService.compareTokem(request).subscribe({
         next: (response) => {
-          console.log(response.bool);
           if(response.bool){
             this.tokenIsTrue = true;
             Swal.fire({
@@ -70,7 +68,7 @@ export class CompareTokemComponent {
   }
 
   trocarSenha():void {
-    if (!this.email && !this.newPassword) {
+    if (!this.email.trim() || !this.newPassword.trim()) {
         Swal.fire({
           title: 'Warning',
           text: 'Não pode ter elementos vazio.',
@@ -80,8 +78,6 @@ export class CompareTokemComponent {
     }
 
     const request = { email: this.email, password: this.newPassword };
-      console.log(this.email)
-      console.log(this.newPassword);
 
       this.resetPasswordService.changePassword(request).subscribe({
         next: (response) =>{

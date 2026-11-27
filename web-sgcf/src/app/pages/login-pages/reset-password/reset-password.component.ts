@@ -36,16 +36,14 @@ export class ResetPasswordComponent {
   const request = { email: this.email };
 
   this.resetPasswordService.request(request).subscribe({
-    next: (responseToken) => {
-      console.log('Token generated:', responseToken);
-
+    next: () => {
       Swal.fire({
         title: 'Success!',
         text: 'Email enviado com sucesso.',
         icon: 'success',
         draggable: true
       });
-      this.router.navigate(['/compare-tokem'])
+      this.router.navigate(['/compare-token'])
     },
     error: (error) => {
       console.error('Error requesting token:', error);
@@ -60,5 +58,4 @@ export class ResetPasswordComponent {
 }
 
 }
-
 

@@ -61,7 +61,7 @@ const users: MockUser[] = [
   {
     id: 1,
     userName: 'ana.moraes',
-    permission: 'Manager',
+    permission: 'MANAGER',
     email: 'gerente@sgcf.com',
     employeeId: 1,
     password: '123456',
@@ -69,7 +69,7 @@ const users: MockUser[] = [
   {
     id: 2,
     userName: 'carlos.lima',
-    permission: 'Employee',
+    permission: 'EMPLOYEE',
     email: 'funcionario@sgcf.com',
     employeeId: 2,
     password: '123456',

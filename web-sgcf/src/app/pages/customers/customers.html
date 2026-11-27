@@ -72,10 +72,14 @@
 <ng-template #modalCustomer>
   <div class="modal-header">
     <h5 class="modal-title">Adicionar Cliente</h5>
-    <button type="button" class="btn-close" aria-label="Fechar" (click)="cancelForm()"></button>
+    <button type="button" class="btn-close" aria-label="Fechar" [disabled]="saving()" (click)="cancelForm()"></button>
   </div>
 
   <div class="modal-body">
+    @if (formError()) {
+      <div class="alert" role="alert">{{ formError() }}</div>
+    }
+
     <div class="row g-4">
       <div class="col-md-6">
         <mdb-form-control>
@@ -113,10 +117,10 @@
         <label class="form-label" for="countryCustomer">Origem</label>
         <select id="countryCustomer" class="form-select" name="countryCustomer"
           [ngModel]="countryCustomer()" (ngModelChange)="countryCustomer.set($event)">
-          <option value="Brazil">Brazil</option>
-          <option value="Paraguay">Paraguay</option>
-          <option value="United_states">United States</option>
-          <option value="Europe">Europe</option>
+          <option value="BRAZIL">Brazil</option>
+          <option value="PARAGUAY">Paraguay</option>
+          <option value="UNITED_STATES">United States</option>
+          <option value="EUROPE">Europe</option>
         </select>
       </div>
 
@@ -125,19 +129,19 @@
 
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="checkbox" id="pt"
-            [checked]="languageSpeak().includes('Portuguese')" (change)="toggleLanguage('Portuguese')" />
+            [checked]="languageSpeak().includes('PORTUGUESE')" (change)="toggleLanguage('PORTUGUESE')" />
           <label class="form-check-label" for="pt">Português</label>
         </div>
 
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="checkbox" id="en"
-            [checked]="languageSpeak().includes('English')" (change)="toggleLanguage('English')" />
+            [checked]="languageSpeak().includes('ENGLISH')" (change)="toggleLanguage('ENGLISH')" />
           <label class="form-check-label" for="en">Inglês</label>
         </div>
 
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="checkbox" id="es"
-            [checked]="languageSpeak().includes('Spanish')" (change)="toggleLanguage('Spanish')" />
+            [checked]="languageSpeak().includes('SPANISH')" (change)="toggleLanguage('SPANISH')" />
           <label class="form-check-label" for="es">Espanhol</label>
         </div>
       </div>
@@ -145,7 +149,9 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="cancelForm()">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="addCustomer()">Salvar Cliente</button>
+    <button type="button" class="btn btn-outline-primary" [disabled]="saving()" (click)="cancelForm()">Cancelar</button>
+    <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="addCustomer()">
+      {{ saving() ? 'Salvando...' : 'Salvar Cliente' }}
+    </button>
   </div>
 </ng-template>

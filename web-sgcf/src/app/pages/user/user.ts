@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { AuthService, AuthenticatedUser } from '../../service/auth.service';
+import Swal from 'sweetalert2';
 
 interface User {
   id: number;
@@ -46,7 +47,7 @@ export class Users {
 
   protected readonly userName = signal('');
   protected readonly userPassword = signal('');
-  protected readonly permission = signal('Employee');
+  protected readonly permission = signal('EMPLOYEE');
   protected readonly email = signal('');
   protected readonly employeeId = signal<number | null>(null);
   protected setEmployeeId(value: string): void {
@@ -123,7 +124,7 @@ export class Users {
 
   protected addUser(): void {
     if (!this.userName().trim() || !this.userPassword() || !this.email().trim()
-      || (this.permission() === 'Employee' && this.employeeId() === null)) {
+      || (this.permission() === 'EMPLOYEE' && this.employeeId() === null)) {
       this.formError.set('Preencha todos os campos e selecione um funcionário para a conta.');
       return;
     }
@@ -133,7 +134,7 @@ export class Users {
       userPassword: this.userPassword(),
       permission: this.permission(),
       email: this.email().trim(),
-      employeeId: this.permission() === 'Employee' ? this.employeeId() : null,
+      employeeId: this.permission() === 'EMPLOYEE' ? this.employeeId() : null,
     };
 
     this.saving.set(true);
@@ -162,19 +163,37 @@ export class Users {
   }
 
   protected removeUser(id: number): void {
-    this.http
-      .delete(`${this.apiUrl}/delete/${id}`, {
-        responseType: 'text'
-      })
-      .subscribe({
-        next: () => {
-          this.users.update(users =>
-            users.filter(user => user.id !== id)
-          );
-        },
-        error: (error) => {
-          console.error('Erro ao remover usuário:', error);
+      Swal.fire({
+        title: 'Excluir usuário?',
+        text: 'Esta ação não pode ser desfeita.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Excluir',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (!result.isConfirmed) {
+          return;
         }
+
+        this.http
+          .delete(`${this.apiUrl}/delete/${id}`, {
+            responseType: 'text'
+          })
+          .subscribe({
+            next: () => {
+              this.users.update(users =>
+                users.filter(user => user.id !== id)
+              );
+              Swal.fire('Usuário excluído com sucesso.');
+            },
+            error: () => {
+              Swal.fire({
+                title: 'Erro',
+                text: 'Não foi possível excluir o usuário.',
+                icon: 'error',
+              });
+            }
+          });
       });
   }
 
@@ -192,7 +211,7 @@ export class Users {
   private clearForm(): void {
     this.userName.set('');
     this.userPassword.set('');
-    this.permission.set('Employee');
+    this.permission.set('EMPLOYEE');
     this.email.set('');
     this.employeeId.set(null);
   }

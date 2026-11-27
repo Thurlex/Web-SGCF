@@ -12,7 +12,7 @@
     <h2>{{ currentUser()?.userName }}</h2>
     <p>{{ currentUser()?.email }}</p>
   <span>
-   {{ currentUser()?.permission === 'Manager' ? 'Gerente' : 'Funcionário' }}
+   {{ currentUser()?.permission === 'MANAGER' ? 'Gerente' : 'Funcionário' }}
   </span>
 </div>
 }
@@ -92,16 +92,16 @@
             id="permission"
             [value]="permission()"
             (change)="permission.set($any($event.target).value)">
-            <option value="Employee">
+            <option value="EMPLOYEE">
               Funcionário
             </option>
-            <option value="Manager">
+            <option value="MANAGER">
               Gerente
             </option>
           </select>
         </div>
 
-        @if (permission() === 'Employee') {
+        @if (permission() === 'EMPLOYEE') {
           <div class="form-group">
             <label for="employeeId">Funcionário</label>
             <select

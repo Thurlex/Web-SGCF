@@ -1,6 +1,6 @@
 # WebSgcf
 
-This project uses Angular 22 and the standalone application API.
+This project uses Angular 19 and the standalone application API.
 
 ## Project structure
 
@@ -30,7 +30,7 @@ docker compose up -d
 .\mvnw.cmd spring-boot:run
 ```
 
-The API uses `localhost:5434` for PostgreSQL and listens on `localhost:8082`.
+The API uses `localhost:5434` for PostgreSQL and listens on `localhost:8080`.
 
 3. Start Angular from the frontend directory:
 
@@ -56,19 +56,18 @@ For a complete list of available schematics (such as `components`, `directives`,
 ng generate --help
 ```
 
-## Building
-
-To build the project run:
+## Build and deployment
 
 ```bash
 npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Deploy the contents of `dist/web-sgcf/browser/`. Configure the web server to serve
+`index.html` for app routes and forward `/api` requests to the backend.
 
 ## Running unit tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Tests use Karma and Jasmine:
 
 ```bash
 npm test

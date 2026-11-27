@@ -14,7 +14,7 @@ import {
   UsersRound,
 } from 'lucide';
 import { AppIcon } from '../shared/app-icon';
-import { AuthService } from '../service/auth.service';
+import { AuthService, AuthenticatedUser } from '../service/auth.service';
 import Swal from 'sweetalert2'
 
 @Component({
@@ -26,6 +26,7 @@ import Swal from 'sweetalert2'
 })
 export class Layout {
   protected readonly isManager = signal(false);
+  protected readonly currentUser = signal<AuthenticatedUser | null>(null);
   protected readonly sidebarOpen = signal(false);
   protected readonly sidebarCollapsed = signal(false);
 
@@ -48,13 +49,34 @@ export class Layout {
     private readonly router: Router,
   ) {
     this.authService.session().subscribe({
-      next: (user) => this.isManager.set(user.permission === 'Manager'),
-      error: () => this.isManager.set(false),
+      next: (user) => {
+        this.currentUser.set(user);
+        this.isManager.set(user.permission === 'MANAGER');
+      },
+      error: () => {
+        this.currentUser.set(null);
+        this.isManager.set(false);
+      },
     });
   }
 
   protected closeMobileSidebar(): void {
     this.sidebarOpen.set(false);
+  }
+
+  protected userInitials(): string {
+    const userName = this.currentUser()?.userName?.trim();
+
+    if (!userName) {
+      return 'U';
+    }
+
+    return userName
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part.charAt(0))
+      .join('')
+      .toUpperCase();
   }
 
   protected toggleSidebarCollapsed(): void {
@@ -70,8 +92,8 @@ export class Layout {
     }).then((result) => {
         if (result.isConfirmed){
           Swal.fire("Voce saiu do sistema");
-          this.router.navigate(["/login"]);
           this.authService.logout();
+          this.router.navigate(["/login"]);
         }
     });
   }

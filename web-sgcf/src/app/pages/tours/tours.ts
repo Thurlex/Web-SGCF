@@ -30,7 +30,7 @@ export class Tours {
   protected readonly formError = signal('');
   protected readonly editingId = signal<number | null>(null);
 
-  protected readonly countries = ['Argentina', 'Brazil', 'Paraguay'];
+  protected readonly countries = ['ARGENTINA', 'BRAZIL', 'PARAGUAY'];
   protected form: TourForm = this.emptyForm();
 
   constructor() {

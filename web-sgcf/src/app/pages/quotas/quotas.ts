@@ -106,14 +106,14 @@ export class Quotas {
       this.formError.set('É necessário iniciar uma sessão para criar uma meta.');
       return;
     }
-    if (this.currentUser()?.permission === 'Employee' && this.currentUser()?.employeeId === null) {
+    if (this.currentUser()?.permission === 'EMPLOYEE' && this.currentUser()?.employeeId === null) {
       this.formError.set('Seu usuário ainda não está vinculado a um funcionário.');
       return;
     }
     this.editingId.set(null);
     this.editingCompany.set(false);
     this.form = this.emptyForm();
-    if (this.currentUser()?.permission === 'Employee') {
+    if (this.currentUser()?.permission === 'EMPLOYEE') {
       this.form.employeeId = this.currentUser()?.employeeId ?? null;
     }
     this.resetFormMessages();
@@ -171,16 +171,16 @@ export class Quotas {
   protected employeeQuotas(): QuotaProgress[] {
     const user = this.currentUser();
     return this.quotas().filter((quota) => quota.employee !== null &&
-      (user?.permission === 'Manager' || quota.employee?.id === user?.employeeId));
+      (user?.permission === 'MANAGER' || quota.employee?.id === user?.employeeId));
   }
 
   protected isManager(): boolean {
-    return this.currentUser()?.permission === 'Manager';
+    return this.currentUser()?.permission === 'MANAGER';
   }
 
   protected canCreateEmployeeQuota(): boolean {
     const user = this.currentUser();
-    return user?.permission === 'Manager' || user?.employeeId != null;
+    return user?.permission === 'MANAGER' || user?.employeeId != null;
   }
 
   protected progressPercent(quota: QuotaProgress): number {

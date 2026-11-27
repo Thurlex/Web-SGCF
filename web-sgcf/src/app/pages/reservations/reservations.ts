@@ -6,6 +6,7 @@ import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 interface Tour {
   id: number;
@@ -42,7 +43,7 @@ interface ReservationRequest {
   status: string;
 }
 
-type ReservationStatus = 'Pending' | 'Confirmed' | 'Cancelled';
+type ReservationStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED';
 
 @Component({
   selector: 'app-reservations',
@@ -74,7 +75,7 @@ export class Reservations {
   protected readonly customerId = signal<number | null>(null);
   protected readonly employeeId = signal<number | null>(null);
   protected readonly value = signal(0);
-  protected readonly status = signal('Pending');
+  protected readonly status = signal('PENDING');
   protected readonly saving = signal(false);
   protected readonly updatingStatus = signal<number | null>(null);
   protected readonly formError = signal('');
@@ -101,7 +102,6 @@ export class Reservations {
         finalize(() => this.loading.set(false))
       )
       .subscribe(data => {
-        console.log('Reservas:', data);
         this.reservations.set(data);
       });
   }
@@ -142,7 +142,6 @@ export class Reservations {
       .get<Tour[]>('/api/tour/findAll')
       .subscribe({
         next: data => {
-          console.log('Tours:', data);
           this.tours.set(data);
         },
         error: error => {
@@ -156,7 +155,6 @@ export class Reservations {
       .get<Customer[]>('/api/customer/findAll')
       .subscribe({
         next: data => {
-          console.log('Clientes:', data);
           this.customers.set(data);
         },
         error: error => {
@@ -170,7 +168,6 @@ export class Reservations {
       .get<Employee[]>('/api/employee/findAll')
       .subscribe({
         next: data => {
-          console.log('Funcionários:', data);
           this.employees.set(data);
         },
         error: error => {
@@ -202,22 +199,22 @@ export class Reservations {
     const employeeId = this.employeeId();
 
     if (!this.date()) {
-      alert('Selecione uma data.');
+      this.formError.set('Selecione uma data.');
       return;
     }
 
     if (tourId === null) {
-      alert('Selecione um passeio.');
+      this.formError.set('Selecione um passeio.');
       return;
     }
 
     if (customerId === null) {
-      alert('Selecione um cliente.');
+      this.formError.set('Selecione um cliente.');
       return;
     }
 
     if (employeeId === null) {
-      alert('Selecione um funcionário.');
+      this.formError.set('Selecione um funcionário.');
       return;
     }
 
@@ -238,8 +235,7 @@ export class Reservations {
         responseType: 'text'
       })
       .subscribe({
-        next: response => {
-          console.log('Reserva criada:', response);
+        next: () => {
           this.showForm.set(false);
           this.clearForm();
           this.modalRef.close();
@@ -269,6 +265,11 @@ export class Reservations {
       },
       error: () => {
         this.loadReservations();
+        Swal.fire({
+          title: 'Erro',
+          text: 'Não foi possível atualizar o status da reserva.',
+          icon: 'error',
+        });
         this.updatingStatus.set(null);
       },
       complete: () => this.updatingStatus.set(null),
@@ -276,24 +277,36 @@ export class Reservations {
   }
 
   protected removeReservation(id: number): void {
-    if (!confirm('Deseja realmente excluir esta reserva?')) {
-      return;
-    }
-
-    this.http
-      .delete(`${this.apiUrl}/delete/${id}`, {
-        responseType: 'text'
-      })
-      .subscribe({
-        next: () => {
-          this.reservations.update(reservations =>
-            reservations.filter(reservation => reservation.id !== id)
-          );
-        },
-        error: error => {
-          console.error('Erro ao remover reserva:', error);
-          alert('Não foi possível remover a reserva.');
+      Swal.fire({
+        title: 'Excluir reserva?',
+        text: 'Esta ação não pode ser desfeita.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Excluir',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (!result.isConfirmed) {
+          return;
         }
+
+        this.http
+          .delete(`${this.apiUrl}/delete/${id}`, {
+            responseType: 'text'
+          })
+          .subscribe({
+            next: () => {
+              this.reservations.update(reservations =>
+                reservations.filter(reservation => reservation.id !== id)
+              );
+            },
+            error: () => {
+              Swal.fire({
+                title: 'Erro',
+                text: 'Não foi possível remover a reserva.',
+                icon: 'error',
+              });
+            }
+          });
       });
   }
 
@@ -303,16 +316,16 @@ export class Reservations {
     this.customerId.set(null);
     this.employeeId.set(null);
     this.value.set(0);
-    this.status.set('Pending');
+    this.status.set('PENDING');
   }
 
   protected translateStatus(status: string): string {
     switch (status) {
-      case 'Pending':
+      case 'PENDING':
         return 'Pendente';
-      case 'Confirmed':
+      case 'CONFIRMED':
         return 'Confirmada';
-      case 'Cancelled':
+      case 'CANCELLED':
         return 'Cancelada';
       default:
         return status;

@@ -8,7 +8,7 @@ export const managerGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   return authService.session().pipe(
-    map((user) => user.permission === 'Manager'
+    map((user) => user.permission === 'MANAGER'
       ? true
       : router.createUrlTree(['/dashboard'])),
     catchError(() => of(router.createUrlTree(['/login'])))

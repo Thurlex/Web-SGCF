@@ -7,16 +7,17 @@ export interface AuthenticateRequest {
   password: string;
 }
 
+export interface AuthenticateResponse {
+  success: boolean;
+  token: string;
+}
+
 export interface AuthenticatedUser {
   id: number;
   userName: string;
-  permission: 'Manager' | 'Employee';
+  permission: 'MANAGER' | 'EMPLOYEE';
   email: string;
   employeeId: number | null;
-}
-export interface AuthenticateEmail {
-  email: string;
-
 }
 
 @Injectable({
@@ -29,26 +30,20 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  authenticate(request: AuthenticateRequest): Observable<boolean> {
-    console.log(`${this.apiUrl}/authenticate`)
-    return this.http.post<boolean>(
+  authenticate(request: AuthenticateRequest): Observable<string> {
+    return this.http.post(
       `${this.apiUrl}/authenticate`,
       request,
-      { withCredentials: true }
+      { responseType: 'text' }
     );
   }
 
   session(): Observable<AuthenticatedUser> {
-  const emailStored = localStorage.getItem('user') ?? '';
-
-  const request: AuthenticateEmail = {
-    email: emailStored
-  };
-
-  return this.http.post<AuthenticatedUser>(`${this.apiUrl}/is-manager`, request);
+    return this.http.get<AuthenticatedUser>(`${this.apiUrl}/me`);
   }
 
   logout(): void {
     localStorage.removeItem('user');
+    localStorage.removeItem('access_token');
   }
 }

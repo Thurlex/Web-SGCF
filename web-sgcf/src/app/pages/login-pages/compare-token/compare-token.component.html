@@ -17,12 +17,12 @@
           <input mdbInput type="text"
           id="form1Example1"
           class="form-control"
-          [(ngModel)] = "tokem"
-          name="tokem" />
-          <label mdbLabel class="form-label" for="form1Example1">Digite seu tokem</label>
+          [(ngModel)] = "token"
+          name="token" />
+          <label mdbLabel class="form-label" for="form1Example1">Digite seu token</label>
         </mdb-form-control>
 
-        <button mdbRipple type="button" class="btn btn-primary btn-block" (click)="compreTokem()">Enviar</button>
+        <button mdbRipple type="button" class="btn btn-primary btn-block" (click)="compareToken()">Enviar</button>
       }@else{
 
         <mdb-form-control class="mb-4">
