@@ -72,10 +72,14 @@
 <ng-template #modalCustomer>
   <div class="modal-header">
     <h5 class="modal-title">Adicionar Cliente</h5>
-    <button type="button" class="btn-close" aria-label="Fechar" (click)="cancelForm()"></button>
+    <button type="button" class="btn-close" aria-label="Fechar" [disabled]="saving()" (click)="cancelForm()"></button>
   </div>
 
   <div class="modal-body">
+    @if (formError()) {
+      <div class="alert" role="alert">{{ formError() }}</div>
+    }
+
     <div class="row g-4">
       <div class="col-md-6">
         <mdb-form-control>
@@ -145,7 +149,9 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="cancelForm()">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="addCustomer()">Salvar Cliente</button>
+    <button type="button" class="btn btn-outline-primary" [disabled]="saving()" (click)="cancelForm()">Cancelar</button>
+    <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="addCustomer()">
+      {{ saving() ? 'Salvando...' : 'Salvar Cliente' }}
+    </button>
   </div>
 </ng-template>

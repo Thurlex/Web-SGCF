@@ -25,6 +25,8 @@ export class Customers {
 
   protected readonly loading = signal(true);
   protected readonly hasError = signal(false);
+  protected readonly saving = signal(false);
+  protected readonly formError = signal('');
   protected readonly customers = signal<Customer[]>([]);
 
   protected readonly name = signal('');
@@ -61,12 +63,15 @@ export class Customers {
     this.cnpj.set('');
     this.countryCustomer.set('BRAZIL');
     this.languageSpeak.set([]);
+    this.formError.set('');
 
     this.modalRef = this.modalService.open(this.modalCustomer);
   }
 
   protected cancelForm(): void {
-    this.modalRef.close();
+    if (!this.saving()) {
+      this.modalRef.close();
+    }
   }
 
   protected toggleLanguage(language: string): void {
@@ -82,24 +87,49 @@ export class Customers {
   }
 
   protected addCustomer(): void {
+    if (this.saving()) {
+      return;
+    }
+
+    const name = this.name().trim();
+    const email = this.email().trim();
+    const cpf = this.cpf().trim();
+    const cnpj = this.cnpj().trim();
+
+    if (!name || !email || (!cpf && !cnpj)) {
+      this.formError.set('Informe nome, email e CPF ou CNPJ do cliente.');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.formError.set('Informe um email válido.');
+      return;
+    }
+
     const customer: CustomerRequest = {
-      cnpj: this.cnpj(),
-      cpf: this.cpf(),
-      name: this.name(),
+      cnpj,
+      cpf,
+      name,
       languageSpeak: this.languageSpeak(),
       countryCustomer: this.countryCustomer(),
-      email: this.email()
+      email
     };
+
+    this.saving.set(true);
+    this.formError.set('');
 
     this.customerService
       .save(customer)
+      .pipe(finalize(() => this.saving.set(false)))
       .subscribe({
         next: () => {
           this.modalRef.close();
           Swal.fire('Cliente cadastrado com sucesso.');
           this.loadCustomers();
         },
-        error: () => Swal.fire('Nao foi possivel cadastrar o cliente. Verifique os dados.')
+        error: () => {
+          this.formError.set('Não foi possível cadastrar o cliente. Verifique os dados.');
+        }
       });
   }
 
