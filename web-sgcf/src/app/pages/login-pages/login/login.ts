@@ -31,11 +31,11 @@ export class Login {
     this.authService.authenticate(request).subscribe({
 
       next: (response) => {
-        if (!response?.token) {
+        if (!response) {
           this.message.set('Usuário ou senha incorretos.');
           return;
         }
-        localStorage.setItem('access_token', response.token);
+        localStorage.setItem('access_token', response);
         localStorage.setItem('user', this.email);
         this.message.set('Bem-vindo.');
         this.router.navigate(['/dashboard']);

@@ -30,10 +30,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  authenticate(request: AuthenticateRequest): Observable<AuthenticateResponse> {
-    return this.http.post<AuthenticateResponse>(
+  authenticate(request: AuthenticateRequest): Observable<string> {
+    return this.http.post(
       `${this.apiUrl}/authenticate`,
       request,
+      { responseType: 'text' }
     );
   }
 
